@@ -1,3 +1,4 @@
 (fp_lib_table
   (lib (name Type-C)(type KiCad)(uri ${KICAD_USER_LIBS}/Type-C.pretty)(options "")(descr ""))
+  (lib (name Switches_SMD)(type KiCad)(uri ${KICAD_USER_LIBS}/footprints/Switches_SMD.pretty)(options "")(descr ""))
 )
