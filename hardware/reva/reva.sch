@@ -36,47 +36,47 @@ F 3 "" H 1500 2100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Mechanical:MountingHole H1
+L Mechanical:MountingHole_Pad H1
 U 1 1 6087682E
 P 1350 7150
 F 0 "H1" H 1450 7196 50  0000 L CNN
 F 1 "MountingHole" H 1450 7105 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965" H 1350 7150 50  0001 C CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" H 1350 7150 50  0001 C CNN
 F 3 "~" H 1350 7150 50  0001 C CNN
 	1    1350 7150
 	1    0    0    -1  
 $EndComp
 $Comp
-L Mechanical:MountingHole H2
+L Mechanical:MountingHole_Pad H2
 U 1 1 60876E0C
-P 1350 7400
-F 0 "H2" H 1450 7446 50  0000 L CNN
-F 1 "MountingHole" H 1450 7355 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965" H 1350 7400 50  0001 C CNN
-F 3 "~" H 1350 7400 50  0001 C CNN
-	1    1350 7400
+P 1350 7500
+F 0 "H2" H 1450 7546 50  0000 L CNN
+F 1 "MountingHole" H 1450 7455 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" H 1350 7500 50  0001 C CNN
+F 3 "~" H 1350 7500 50  0001 C CNN
+	1    1350 7500
 	1    0    0    -1  
 $EndComp
 $Comp
-L Mechanical:MountingHole H3
+L Mechanical:MountingHole_Pad H3
 U 1 1 60876F68
 P 2150 7150
 F 0 "H3" H 2250 7196 50  0000 L CNN
 F 1 "MountingHole" H 2250 7105 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965" H 2150 7150 50  0001 C CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" H 2150 7150 50  0001 C CNN
 F 3 "~" H 2150 7150 50  0001 C CNN
 	1    2150 7150
 	1    0    0    -1  
 $EndComp
 $Comp
-L Mechanical:MountingHole H4
+L Mechanical:MountingHole_Pad H4
 U 1 1 608770D0
-P 2150 7400
-F 0 "H4" H 2250 7446 50  0000 L CNN
-F 1 "MountingHole" H 2250 7355 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965" H 2150 7400 50  0001 C CNN
-F 3 "~" H 2150 7400 50  0001 C CNN
-	1    2150 7400
+P 2150 7500
+F 0 "H4" H 2250 7546 50  0000 L CNN
+F 1 "MountingHole" H 2250 7455 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad" H 2150 7500 50  0001 C CNN
+F 3 "~" H 2150 7500 50  0001 C CNN
+	1    2150 7500
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -91,13 +91,9 @@ F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/MIC550X.pdf" H 2200 6500 50
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5850 4900 5250 4900
-Text Label 5250 4900 0    50   ~ 0
-USB_DP
+	5850 4900 5500 4900
 Wire Wire Line
-	5850 4800 5250 4800
-Text Label 5250 4800 0    50   ~ 0
-USB_DM
+	5850 4800 5500 4800
 Wire Wire Line
 	5850 5400 5500 5400
 Wire Wire Line
@@ -202,7 +198,7 @@ L Power_Protection:PRTR5V0U2X D6
 U 1 1 608969C1
 P 4050 1550
 F 0 "D6" H 4594 1596 50  0000 L CNN
-F 1 "PRTR5V0U2X" H 4594 1505 50  0000 L CNN
+F 1 "PRTR5V0U2X" H 4450 1800 50  0000 L CNN
 F 2 "Package_TO_SOT_SMD:SOT-143" H 4110 1550 50  0001 C CNN
 F 3 "https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2X.pdf" H 4110 1550 50  0001 C CNN
 	1    4050 1550
@@ -385,13 +381,9 @@ Wire Wire Line
 	2050 2250 2450 2250
 Connection ~ 2050 2250
 Wire Wire Line
-	2750 1950 3250 1950
-Text Label 3250 1950 2    50   ~ 0
-USB_DM
+	2750 1950 2950 1950
 Wire Wire Line
-	2750 2250 3250 2250
-Text Label 3250 2250 2    50   ~ 0
-USB_DP
+	2750 2250 2950 2250
 Wire Wire Line
 	9650 4300 10150 4300
 Wire Wire Line
@@ -738,37 +730,6 @@ F 3 "" H 7500 1600 50  0001 C CNN
 $EndComp
 Connection ~ 7500 1600
 $Comp
-L Connector_Generic:Conn_01x05 J2
-U 1 1 608DE80A
-P 10800 2550
-F 0 "J2" H 10880 2592 50  0000 L CNN
-F 1 "Conn_01x05" H 10880 2501 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 10800 2550 50  0001 C CNN
-F 3 "~" H 10800 2550 50  0001 C CNN
-	1    10800 2550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10600 2350 10100 2350
-Wire Wire Line
-	10100 2350 10100 2400
-Wire Wire Line
-	10600 2750 10100 2750
-Wire Wire Line
-	10100 2750 10100 2700
-Wire Wire Line
-	10600 2650 10150 2650
-Wire Wire Line
-	10150 2650 10150 2600
-Wire Wire Line
-	10150 2600 10100 2600
-Wire Wire Line
-	10600 2450 10150 2450
-Wire Wire Line
-	10150 2450 10150 2500
-Wire Wire Line
-	10150 2500 10100 2500
-$Comp
 L Device:C C12
 U 1 1 608E8907
 P 8650 1450
@@ -875,17 +836,6 @@ F 3 "" H 8650 1250 50  0001 C CNN
 	1    8650 1250
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:VDC #PWR0129
-U 1 1 60906F47
-P 10450 2550
-F 0 "#PWR0129" H 10450 2450 50  0001 C CNN
-F 1 "VDC" H 10465 2723 50  0000 C CNN
-F 2 "" H 10450 2550 50  0001 C CNN
-F 3 "" H 10450 2550 50  0001 C CNN
-	1    10450 2550
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	9800 1600 9800 1250
 Wire Wire Line
@@ -965,8 +915,6 @@ Wire Wire Line
 	8600 2500 8900 2500
 Wire Wire Line
 	8600 2400 8900 2400
-Wire Wire Line
-	10450 2550 10600 2550
 $Comp
 L Switch:SW_Push SW1
 U 1 1 60956B53
@@ -1318,8 +1266,8 @@ $Comp
 L Device:R R7
 U 1 1 60A11E6E
 P 3750 2500
-F 0 "R7" V 3543 2500 50  0000 C CNN
-F 1 "330" V 3634 2500 50  0000 C CNN
+F 0 "R7" V 3800 2300 50  0000 C CNN
+F 1 "330" V 3850 2500 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3680 2500 50  0001 C CNN
 F 3 "~" H 3750 2500 50  0001 C CNN
 	1    3750 2500
@@ -1331,8 +1279,8 @@ $Comp
 L Device:R R8
 U 1 1 60A18977
 P 3750 2700
-F 0 "R8" V 3543 2700 50  0000 C CNN
-F 1 "330" V 3634 2700 50  0000 C CNN
+F 0 "R8" V 3800 2500 50  0000 C CNN
+F 1 "330" V 3850 2700 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3680 2700 50  0001 C CNN
 F 3 "~" H 3750 2700 50  0001 C CNN
 	1    3750 2700
@@ -1342,8 +1290,8 @@ $Comp
 L Device:R R9
 U 1 1 60A18D2A
 P 3750 2900
-F 0 "R9" V 3543 2900 50  0000 C CNN
-F 1 "330" V 3634 2900 50  0000 C CNN
+F 0 "R9" V 3800 2700 50  0000 C CNN
+F 1 "330" V 3850 2900 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3680 2900 50  0001 C CNN
 F 3 "~" H 3750 2900 50  0001 C CNN
 	1    3750 2900
@@ -1353,8 +1301,8 @@ $Comp
 L Device:R R10
 U 1 1 60A190B8
 P 3750 3100
-F 0 "R10" V 3543 3100 50  0000 C CNN
-F 1 "330" V 3634 3100 50  0000 C CNN
+F 0 "R10" V 3800 2900 50  0000 C CNN
+F 1 "330" V 3850 3100 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3680 3100 50  0001 C CNN
 F 3 "~" H 3750 3100 50  0001 C CNN
 	1    3750 3100
@@ -1402,7 +1350,7 @@ $Comp
 L Device:R R20
 U 1 1 608C7709
 P 5650 3400
-F 0 "R20" V 5550 3250 50  0000 C CNN
+F 0 "R20" V 5550 3400 50  0000 C CNN
 F 1 "330" V 5650 3400 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 5580 3400 50  0001 C CNN
 F 3 "~" H 5650 3400 50  0001 C CNN
@@ -1413,7 +1361,7 @@ $Comp
 L Device:R R21
 U 1 1 608CE78D
 P 5650 3500
-F 0 "R21" V 5750 3350 50  0000 C CNN
+F 0 "R21" V 5750 3500 50  0000 C CNN
 F 1 "330" V 5650 3500 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 5580 3500 50  0001 C CNN
 F 3 "~" H 5650 3500 50  0001 C CNN
@@ -1439,8 +1387,8 @@ $Comp
 L Device:R R19
 U 1 1 608F55F2
 P 3750 3300
-F 0 "R19" V 3543 3300 50  0000 C CNN
-F 1 "330" V 3634 3300 50  0000 C CNN
+F 0 "R19" V 3850 3100 50  0000 C CNN
+F 1 "330" V 3850 3300 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3680 3300 50  0001 C CNN
 F 3 "~" H 3750 3300 50  0001 C CNN
 	1    3750 3300
@@ -1467,9 +1415,9 @@ $EndComp
 Wire Wire Line
 	4350 3300 4500 3300
 Text GLabel 5500 4600 0    50   Input ~ 0
-BIN1
-Text GLabel 5500 4700 0    50   Input ~ 0
 BIN2
+Text GLabel 5500 4700 0    50   Input ~ 0
+BIN1
 Wire Wire Line
 	5500 4700 5850 4700
 Wire Wire Line
@@ -1489,7 +1437,6 @@ Wire Wire Line
 Connection ~ 10200 2200
 Wire Wire Line
 	10100 2200 10200 2200
-Connection ~ 9400 3000
 Wire Wire Line
 	10200 2200 10450 2200
 Wire Wire Line
@@ -1505,17 +1452,6 @@ F 1 "10k" H 10270 1805 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 10130 1850 50  0001 C CNN
 F 3 "~" H 10200 1850 50  0001 C CNN
 	1    10200 1850
-	1    0    0    -1  
-$EndComp
-$Comp
-L Driver_Motor:DRV8833PWP U2
-U 1 1 60871C6C
-P 9500 2300
-F 0 "U2" H 9500 3181 50  0000 C CNN
-F 1 "DRV8833PWP" H 9500 3090 50  0000 C CNN
-F 2 "Package_SO:HTSSOP-16-1EP_4.4x5mm_P0.65mm_EP3.4x5mm_Mask2.46x2.31mm_ThermalVias" H 9950 2750 50  0001 L CNN
-F 3 "http://www.ti.com/lit/ds/symlink/drv8833.pdf" H 9350 2850 50  0001 C CNN
-	1    9500 2300
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1656,4 +1592,178 @@ NoConn ~ 5850 3200
 NoConn ~ 5850 5200
 NoConn ~ 1600 2350
 NoConn ~ 1600 1750
+Wire Wire Line
+	3550 1550 3350 1550
+Text Label 3350 1550 0    50   ~ 0
+_DP
+Wire Wire Line
+	4550 1550 4900 1550
+Text Label 4750 1550 0    50   ~ 0
+_DM
+Text Label 2100 1950 0    50   ~ 0
+_DM
+Text Label 2100 2250 0    50   ~ 0
+_DP
+Connection ~ 9400 3000
+$Comp
+L Driver_Motor:DRV8833PWP U2
+U 1 1 60871C6C
+P 9500 2300
+F 0 "U2" H 9500 3181 50  0000 C CNN
+F 1 "DRV8833PWP" H 9500 3090 50  0000 C CNN
+F 2 "Package_SO:HTSSOP-16-1EP_4.4x5mm_P0.65mm_EP3.4x5mm_Mask2.46x2.31mm_ThermalVias" H 9950 2750 50  0001 L CNN
+F 3 "http://www.ti.com/lit/ds/symlink/drv8833.pdf" H 9350 2850 50  0001 C CNN
+	1    9500 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10200 2350 10200 2600
+Wire Wire Line
+	10200 2600 10100 2600
+Wire Wire Line
+	10250 2450 10250 2700
+Wire Wire Line
+	10250 2700 10100 2700
+Wire Wire Line
+	10100 2500 10350 2500
+Wire Wire Line
+	10350 2500 10350 2650
+Text Label 10500 2650 0    50   ~ 0
+A2
+Text Label 10500 2450 0    50   ~ 0
+B2
+Text Label 10500 2350 0    50   ~ 0
+B1
+Wire Wire Line
+	10350 2650 10750 2650
+Wire Wire Line
+	10750 2450 10250 2450
+Wire Wire Line
+	10750 2350 10200 2350
+$Comp
+L power:VDC #PWR0129
+U 1 1 60906F47
+P 10750 2550
+F 0 "#PWR0129" H 10750 2450 50  0001 C CNN
+F 1 "VDC" H 10765 2723 50  0000 C CNN
+F 2 "" H 10750 2550 50  0001 C CNN
+F 3 "" H 10750 2550 50  0001 C CNN
+	1    10750 2550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x05 J2
+U 1 1 608DE80A
+P 10950 2550
+F 0 "J2" H 11030 2592 50  0000 L CNN
+F 1 "Conn_01x05" H 10750 2200 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 10950 2550 50  0001 C CNN
+F 3 "~" H 10950 2550 50  0001 C CNN
+	1    10950 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10450 2750 10750 2750
+Text Label 10500 2750 0    50   ~ 0
+A1
+Wire Wire Line
+	10100 2400 10450 2400
+Wire Wire Line
+	10450 2400 10450 2750
+$Comp
+L power:GND #PWR0146
+U 1 1 60AB8DDC
+P 2150 7250
+F 0 "#PWR0146" H 2150 7000 50  0001 C CNN
+F 1 "GND" H 2155 7077 50  0000 C CNN
+F 2 "" H 2150 7250 50  0001 C CNN
+F 3 "" H 2150 7250 50  0001 C CNN
+	1    2150 7250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0147
+U 1 1 60AB96A3
+P 2150 7600
+F 0 "#PWR0147" H 2150 7350 50  0001 C CNN
+F 1 "GND" H 2155 7427 50  0000 C CNN
+F 2 "" H 2150 7600 50  0001 C CNN
+F 3 "" H 2150 7600 50  0001 C CNN
+	1    2150 7600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0148
+U 1 1 60ABA447
+P 1350 7600
+F 0 "#PWR0148" H 1350 7350 50  0001 C CNN
+F 1 "GND" H 1355 7427 50  0000 C CNN
+F 2 "" H 1350 7600 50  0001 C CNN
+F 3 "" H 1350 7600 50  0001 C CNN
+	1    1350 7600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0149
+U 1 1 60ABACAC
+P 1350 7250
+F 0 "#PWR0149" H 1350 7000 50  0001 C CNN
+F 1 "GND" H 1355 7077 50  0000 C CNN
+F 2 "" H 1350 7250 50  0001 C CNN
+F 3 "" H 1350 7250 50  0001 C CNN
+	1    1350 7250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Graphic:Logo_Open_Hardware_Small #LOGO1
+U 1 1 60B21A19
+P 7350 6850
+F 0 "#LOGO1" H 7350 7125 50  0001 C CNN
+F 1 "Logo_Open_Hardware_Small" H 7350 6625 50  0001 C CNN
+F 2 "Symbol:OSHW-Logo2_7.3x6mm_SilkScreen" H 7350 6850 50  0001 C CNN
+F 3 "~" H 7350 6850 50  0001 C CNN
+	1    7350 6850
+	1    0    0    -1  
+$EndComp
+Text Notes 7950 7500 0    59   ~ 0
+StepperControl RevA
+Text GLabel 2950 1950 2    50   Input ~ 0
+USB_DM
+Text GLabel 2950 2250 2    50   Input ~ 0
+USB_DP
+Text GLabel 5500 4900 0    50   Input ~ 0
+USB_DP
+Text GLabel 5500 4800 0    50   Input ~ 0
+USB_DM
+Text GLabel 4550 5450 0    50   Input ~ 0
+RESET
+Wire Wire Line
+	4550 5450 5150 5450
+Wire Wire Line
+	5150 5450 5150 5700
+$Comp
+L Connector_Generic:Conn_01x02 J3
+U 1 1 608F22FB
+P 2150 5100
+F 0 "J3" H 2068 4775 50  0000 C CNN
+F 1 "Conn_01x02" H 2068 4866 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 2150 5100 50  0001 C CNN
+F 3 "~" H 2150 5100 50  0001 C CNN
+	1    2150 5100
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	1800 5000 1950 5000
+Connection ~ 1800 5000
+$Comp
+L power:GND #PWR0150
+U 1 1 6090013D
+P 1950 5100
+F 0 "#PWR0150" H 1950 4850 50  0001 C CNN
+F 1 "GND" H 1955 4927 50  0000 C CNN
+F 2 "" H 1950 5100 50  0001 C CNN
+F 3 "" H 1950 5100 50  0001 C CNN
+	1    1950 5100
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
