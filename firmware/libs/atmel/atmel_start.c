@@ -6,6 +6,6 @@
 void atmel_start_init(void)
 {
 	system_init();
-	usb_init();
 	persistent_storage_init();
+	usb_init();
 }

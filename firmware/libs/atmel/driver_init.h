@@ -26,6 +26,8 @@ extern "C" {
 #include <hal_usart_sync.h>
 #include <hal_timer.h>
 #include <hpl_tc_base.h>
+#include <hal_timer.h>
+#include <hpl_tc_base.h>
 
 #include "hal_usb_device.h"
 
@@ -33,6 +35,7 @@ extern struct flash_descriptor FLASH_0;
 
 extern struct usart_sync_descriptor USART_0;
 extern struct timer_descriptor      TIMER_0;
+extern struct timer_descriptor      TIMER_1;
 
 void FLASH_0_init(void);
 void FLASH_0_CLOCK_init(void);
@@ -41,8 +44,8 @@ void USART_0_PORT_init(void);
 void USART_0_CLOCK_init(void);
 void USART_0_init(void);
 
-void USB_0_CLOCK_init(void);
-void USB_0_init(void);
+void USB_DEVICE_INSTANCE_CLOCK_init(void);
+void USB_DEVICE_INSTANCE_init(void);
 
 /**
  * \brief Perform system initialization, initialize pins and clocks for

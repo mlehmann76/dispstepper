@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include "board.h"
 #include "stepper.h"
 #include <atmel_start.h>
 
@@ -8,19 +10,26 @@ static state_t sstate;
 int main(void) {
   /* Initializes MCU, drivers and middleware */
   atmel_start_init();
+  SysTick_Init();
   timer_start(&TIMER_0);
-  
+
   stepCtrl step = {4096, 1e6};
+  keycheck<uint8_t, SW_MODE, SW_DOWN, SW_SEL, SW_UP> buttons;
 
   /* Replace with your application code */
+  uint32_t lastTick = 0;
   while (1) {
+    if (lastTick != getTick()) {
+      lastTick = getTick();
+      buttons.run();
+    }
     step.func(hri_tccount16_read_COUNT_COUNT_bf(TC3));
     switch (sstate) {
     case SIDLE:
-      if (0 == gpio_get_pin_level(SW_UP)) {
+      if (buttons.pressed<SW_UP>()) {
         step.cw(0.2, BUTTON_STEPS);
         sstate = SRUN;
-      } else if (0 == gpio_get_pin_level(SW_DONW)) {
+      } else if (buttons.pressed<SW_DOWN>()) {
         step.ccw(0.2, BUTTON_STEPS);
         sstate = SRUN;
       }

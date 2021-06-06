@@ -20,6 +20,9 @@ PUBLIC
     ${HPL_PATH}/tc
     ${ATMEL_PATH}/persistent_storage
     ${ATMEL_PATH}/usb
+    ${ATMEL_PATH}/usb/device
+    ${ATMEL_PATH}/usb/class/cdc/
+    ${ATMEL_PATH}/usb/class/cdc/device
     ${ATMEL_PATH}/examples
     ) 
 
@@ -31,6 +34,9 @@ PUBLIC
     ${ATMEL_PATH}/driver_init.c
     ${ATMEL_PATH}/persistent_storage_start.c
     ${ATMEL_PATH}/usb_start.c
+    ${ATMEL_PATH}/usb/usb_protocol.c
+    ${ATMEL_PATH}/usb/device/usbdc.c
+    ${ATMEL_PATH}/usb/class/cdc/device/cdcdf_acm.c
     ${HAL_PATH}/src/hal_atomic.c
     ${HAL_PATH}/src/hal_delay.c
     ${HAL_PATH}/src/hal_flash.c

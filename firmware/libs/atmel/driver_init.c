@@ -14,6 +14,7 @@
 #include <hpl_pm_base.h>
 
 struct timer_descriptor TIMER_0;
+struct timer_descriptor TIMER_1;
 
 struct flash_descriptor FLASH_0;
 
@@ -65,7 +66,20 @@ static void TIMER_0_init(void)
 	timer_init(&TIMER_0, TC3, _tc_get_timer());
 }
 
-void USB_0_PORT_init(void)
+/**
+ * \brief Timer initialization function
+ *
+ * Enables Timer peripheral, clocks and initializes Timer driver
+ */
+static void TIMER_1_init(void)
+{
+	_pm_enable_bus_clock(PM_BUS_APBC, TC4);
+	_gclk_enable_channel(TC4_GCLK_ID, CONF_GCLK_TC4_SRC);
+
+	timer_init(&TIMER_1, TC4, _tc_get_timer());
+}
+
+void USB_DEVICE_INSTANCE_PORT_init(void)
 {
 
 	gpio_set_pin_direction(PA24,
@@ -153,7 +167,7 @@ void USB_0_PORT_init(void)
 #warning USB clock should be 48MHz ~ 0.25% clock, check your configuration!
 #endif
 
-void USB_0_CLOCK_init(void)
+void USB_DEVICE_INSTANCE_CLOCK_init(void)
 {
 
 	_pm_enable_bus_clock(PM_BUS_APBB, USB);
@@ -161,11 +175,11 @@ void USB_0_CLOCK_init(void)
 	_gclk_enable_channel(USB_GCLK_ID, CONF_GCLK_USB_SRC);
 }
 
-void USB_0_init(void)
+void USB_DEVICE_INSTANCE_init(void)
 {
-	USB_0_CLOCK_init();
+	USB_DEVICE_INSTANCE_CLOCK_init();
 	usb_d_init();
-	USB_0_PORT_init();
+	USB_DEVICE_INSTANCE_PORT_init();
 }
 
 void system_init(void)
@@ -246,9 +260,9 @@ void system_init(void)
 	// GPIO on PA14
 
 	// Set pin direction to input
-	gpio_set_pin_direction(SW_DONW, GPIO_DIRECTION_IN);
+	gpio_set_pin_direction(SW_DOWN, GPIO_DIRECTION_IN);
 
-	gpio_set_pin_pull_mode(SW_DONW,
+	gpio_set_pin_pull_mode(SW_DOWN,
 	                       // <y> Pull configuration
 	                       // <id> pad_pull_config
 	                       // <GPIO_PULL_OFF"> Off
@@ -256,7 +270,7 @@ void system_init(void)
 	                       // <GPIO_PULL_DOWN"> Pull-down
 	                       GPIO_PULL_UP);
 
-	gpio_set_pin_function(SW_DONW, GPIO_PIN_FUNCTION_OFF);
+	gpio_set_pin_function(SW_DOWN, GPIO_PIN_FUNCTION_OFF);
 
 	// GPIO on PA15
 
@@ -378,6 +392,7 @@ void system_init(void)
 	USART_0_init();
 
 	TIMER_0_init();
+	TIMER_1_init();
 
-	USB_0_init();
+	USB_DEVICE_INSTANCE_init();
 }
