@@ -7,13 +7,14 @@ void SysTick_Init();
 uint32_t getTick();
 
 template <typename TGpio, TGpio... Gpio> class buttonCheck {
-  enum bstate {bpressed, breleased};
+  enum bstate { bpressed, breleased };
 
   struct check_t {
     check_t(TGpio _g) : _gpio(_g), _state(breleased), _count(0) {}
     TGpio _gpio;
     bstate _state;
     uint32_t _count;
+    bool _stateChanged;
   };
 
 public:
@@ -26,13 +27,17 @@ public:
         if (_gstate != key._state) {
           key._count = 0;
           key._state = _gstate;
+        } else {
+          key._stateChanged = key._count > 500 ? true : false; //FIXME Magic
         }
       }
       m_lasttick = tick;
     }
   }
 
-  template <TGpio gpio> constexpr bstate state() const {
+  template <TGpio gpio> constexpr bstate state() const { return state(gpio); }
+
+  constexpr bstate state(TGpio gpio) const {
     for (auto key : m_gpio) {
       if (key._gpio == gpio) {
         return key._state;
@@ -42,15 +47,7 @@ public:
     return breleased;
   }
 
-  template <TGpio gpio> constexpr bool pressed() const {
-    for (auto key : m_gpio) {
-      if (key._gpio == gpio) {
-        return key._state == bpressed && key._count > 50;
-      }
-    }
-    static_assert(true, "button unknown"); 
-    return false;
-  }
+  template <TGpio gpio> constexpr bool pressed() const { return pressed(gpio); }
 
   constexpr bool pressed(TGpio gpio) const {
     for (auto key : m_gpio) {
@@ -59,6 +56,18 @@ public:
       }
     }
     return false;
+  }
+
+  constexpr bool stateChanged(TGpio gpio) {
+    bool ret = false;
+    for (auto key : m_gpio) {
+      if (key._gpio == gpio) {
+        ret = key._stateChanged;
+        key._stateChanged = false;
+        break;
+      }
+    }
+    return ret;
   }
 
 private:

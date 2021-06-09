@@ -11,4 +11,6 @@
 #ifndef CONF_BOARD_H
 #define CONF_BOARD_H
 
+#include <atmel_start_pins.h>
+
 #endif // CONF_BOARD_H

@@ -10,6 +10,7 @@ target_sources(${PROJECT_NAME}
         main.cpp
         stepper.cpp
         board.cpp
+        control.cpp
     PUBLIC
 )
 
