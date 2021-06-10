@@ -26,9 +26,14 @@ public:
         bstate _gstate = gpio_get_pin_level(key._gpio) ? breleased : bpressed;
         if (_gstate != key._state) {
           key._count = 0;
-          key._state = _gstate;
+          key._stateChanged = false;
         } else {
-          key._stateChanged = key._count > 500 ? true : false; //FIXME Magic
+          if (key._count == 50) {
+            key._state = _gstate;
+            key._stateChanged = true; 
+          } else  {
+            key._count++;
+          }
         }
       }
       m_lasttick = tick;

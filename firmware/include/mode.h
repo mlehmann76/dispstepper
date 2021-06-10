@@ -1,18 +1,24 @@
 #ifndef __MODE_H_
 #define __MODE_H_
 
-#include "user_board.h"
 #include "board.h"
 #include "leds.h"
+#include "user_board.h"
 #include <functional>
 
-static constexpr int MODES = 2;
-enum viewMode { ModeSingle = 0, ModeRepeat = 1 };
+static constexpr int MODES = 3;
+static constexpr int MAXLEVEL = 3;
+static constexpr int TIMEOUT = 3;
+
+enum viewMode { ModeSingle = 0, ModeRepeat = 1, ModeManual = 2 };
 
 template <typename TGpio, typename buttonCheckType, typename ledViewType>
 class mode {
+public:
+  using modeCbType = std::function<void(viewMode, uint32_t)>;
+  using buttonCbType = std::function<void(TGpio, bool)>;
 
-  struct modeselect {
+      struct modeselect {
     void select(uint32_t tick) {
       isEnabled = true;
       count = tick;
@@ -24,39 +30,26 @@ class mode {
   };
 
 public:
-
   constexpr mode()
       : m_button{}, m_led{}, m_mode(ModeSingle), m_modeSelect{true, 0},
-        m_modeValues() {}
+        m_modeIndex() {}
 
   void run(uint32_t tick) {
     if (m_modeSelect.isEnabled) {
-      if (m_button.pressed(SW_MODE)) {
-        switch (m_mode) {
-        case ModeSingle:
-          m_mode = ModeRepeat;
-          break;
-        case ModeRepeat:
-          m_mode = ModeSingle;
-          break;
-        };
-        m_led.set(m_mode, single{});
-        m_modeSelect.select(tick + 1000); // TODO define Ticktime
-        if (m_modeChangeCb) {
-          m_modeChangeCb(m_mode);
-        }
-      }
+      onModeButton(tick);
+      onUpDownButton(tick);
       if (m_modeSelect.isTimeOut(tick)) {
         m_modeSelect.isEnabled = false;
+        m_led.set(m_modeIndex[m_mode], bar{});
+        if (m_modeChangeCb) {
+          m_modeChangeCb(m_mode, modeValue());
+        }
       }
+    } else if (m_button.pressed(SW_MODE)) {
+      m_modeSelect.select(tick + TIMEOUT);
     } else {
-      if (m_button.pressed(SW_MODE)) {
-        m_modeSelect.select(tick + 1000); // TODO define Ticktime
-      }
-      m_led.set(m_modeValues[m_mode], bar{});
+      checkbuttons();
     }
-
-    checkbuttons();
   }
 
   void checkbuttons() {
@@ -70,19 +63,52 @@ public:
     }
   }
 
-  void registerCb(std::function<void(viewMode)> &&cb) { m_modeChangeCb = cb; }
-  void registerCb(std::function<void(TGpio, bool)> &&cb) {
-    m_buttonChangeCb = cb;
+  void registerModeCb(modeCbType &&cb) { m_modeChangeCb = cb; }
+  void registerButtonCb(buttonCbType &&cb) { m_buttonChangeCb = cb; }
+
+  uint32_t modeValue() const {
+    return m_modeIndex[m_mode];
   }
 
 private:
+  void onModeButton(uint32_t tick) {
+    if (m_button.pressed(SW_MODE)) {
+      switch (m_mode) {
+      case ModeSingle:
+        m_mode = ModeRepeat;
+        break;
+      case ModeRepeat:
+        m_mode = ModeManual;
+        break;
+      case ModeManual:
+        m_mode = ModeSingle;
+        break;
+      };
+      m_led.set(m_mode, single{});
+      m_modeSelect.select(tick + TIMEOUT); 
+    }
+  }
+  //
+  void onUpDownButton(uint32_t tick) {
+    if (m_button.pressed(SW_UP) && m_modeIndex[m_mode] < MAXLEVEL) {
+      m_modeIndex[m_mode]++;
+      m_led.set(m_modeIndex[m_mode], bar{});
+      m_modeSelect.select(tick + TIMEOUT); 
+    }
+    if (m_button.pressed(SW_DOWN) && m_modeIndex[m_mode] > 0) {
+      m_modeIndex[m_mode]--;
+      m_led.set(m_modeIndex[m_mode], bar{});
+      m_modeSelect.select(tick + TIMEOUT); 
+    }
+  }
+
   buttonCheckType m_button;
   ledViewType m_led;
   viewMode m_mode;
   modeselect m_modeSelect;
-  uint32_t m_modeValues[MODES];
-  std::function<void(viewMode)> m_modeChangeCb;
-  std::function<void(TGpio, bool)> m_buttonChangeCb;
+  uint32_t m_modeIndex[MODES];
+  modeCbType m_modeChangeCb;
+  buttonCbType m_buttonChangeCb;
 };
 
 #endif // __MODE_H_
