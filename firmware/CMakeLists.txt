@@ -34,6 +34,7 @@ endif()
 
 include_directories("include/")
 include(samd21)
+include(gdb-helper)
 
 file(WRITE null.cpp "")
 add_executable(${PROJECT_NAME} null.cpp)
@@ -41,13 +42,19 @@ add_executable(${PROJECT_NAME} null.cpp)
 add_subdirectory(src)
 add_subdirectory(libs)
 
-#target_link_libraries (${PROJECT_NAME} LINK_PUBLIC main atmel)
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN}-size${TOOLCHAIN_EXT} --format=berkeley ${PROJECT_NAME})
-
 enable_testing()
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
     add_subdirectory(test)
 endif() 
+
+generate_run_gdb_openocd(${PROJECT_NAME})
+generate_vscode_launch_openocd(${PROJECT_NAME})
+
+# Print section sizes of target
+print_section_sizes(${PROJECT_NAME})
+
+# Create output in hex and binary format
+create_bin_output(${PROJECT_NAME})
+create_hex_output(${PROJECT_NAME})
+
