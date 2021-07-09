@@ -13,9 +13,6 @@
 #include <hpl_gclk_base.h>
 #include <hpl_pm_base.h>
 
-struct timer_descriptor TIMER_0;
-struct timer_descriptor TIMER_1;
-
 struct flash_descriptor FLASH_0;
 
 struct usart_sync_descriptor USART_0;
@@ -53,30 +50,11 @@ void USART_0_init(void)
 	USART_0_PORT_init();
 }
 
-/**
- * \brief Timer initialization function
- *
- * Enables Timer peripheral, clocks and initializes Timer driver
- */
-static void TIMER_0_init(void)
+void TIMER_0_CLOCK_init(void)
 {
 	_pm_enable_bus_clock(PM_BUS_APBC, TC3);
+
 	_gclk_enable_channel(TC3_GCLK_ID, CONF_GCLK_TC3_SRC);
-
-	timer_init(&TIMER_0, TC3, _tc_get_timer());
-}
-
-/**
- * \brief Timer initialization function
- *
- * Enables Timer peripheral, clocks and initializes Timer driver
- */
-static void TIMER_1_init(void)
-{
-	_pm_enable_bus_clock(PM_BUS_APBC, TC4);
-	_gclk_enable_channel(TC4_GCLK_ID, CONF_GCLK_TC4_SRC);
-
-	timer_init(&TIMER_1, TC4, _tc_get_timer());
 }
 
 void USB_DEVICE_INSTANCE_PORT_init(void)
@@ -391,8 +369,9 @@ void system_init(void)
 
 	USART_0_init();
 
+	TIMER_0_CLOCK_init();
+
 	TIMER_0_init();
-	TIMER_1_init();
 
 	USB_DEVICE_INSTANCE_init();
 }

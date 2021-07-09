@@ -105,14 +105,12 @@ void control::onModeManual() {
     break;
 
   case SRUN:
-    if (!m_stepper->isRunning()) {
-      if (m_stepper->dir() == stepCtrl::CW) {
-        m_stepper->ccw(modeValue(), BUTTON_STEPS / 16);
-      } else {
-        m_stepper->cw(modeValue(), BUTTON_STEPS / 16);
-      }
-      sstate = SRETRACT;
+    if (m_stepper->dir() == stepCtrl::CW) {
+      m_stepper->ccw(modeValue(), BUTTON_STEPS / 16);
+    } else {
+      m_stepper->cw(modeValue(), BUTTON_STEPS / 16);
     }
+    sstate = SRETRACT;
     break;
 
   case SRETRACT:

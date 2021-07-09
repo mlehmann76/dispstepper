@@ -16,7 +16,7 @@
 // <i> Indicates whether Run in Standby is enabled or not
 // <id> gclk_arch_gen_0_RUNSTDBY
 #ifndef CONF_GCLK_GEN_0_RUNSTDBY
-#define CONF_GCLK_GEN_0_RUNSTDBY 0
+#define CONF_GCLK_GEN_0_RUNSTDBY 1
 #endif
 
 // <q> Divide Selection
@@ -30,7 +30,7 @@
 // <i> Indicates whether Output Enable is enabled or not
 // <id> gclk_arch_gen_0_oe
 #ifndef CONF_GCLK_GEN_0_OE
-#define CONF_GCLK_GEN_0_OE 0
+#define CONF_GCLK_GEN_0_OE 1
 #endif
 
 // <q> Output Off Value
@@ -92,7 +92,7 @@
 // <i> Indicates whether Run in Standby is enabled or not
 // <id> gclk_arch_gen_1_RUNSTDBY
 #ifndef CONF_GCLK_GEN_1_RUNSTDBY
-#define CONF_GCLK_GEN_1_RUNSTDBY 0
+#define CONF_GCLK_GEN_1_RUNSTDBY 1
 #endif
 
 // <q> Divide Selection
@@ -106,7 +106,7 @@
 // <i> Indicates whether Output Enable is enabled or not
 // <id> gclk_arch_gen_1_oe
 #ifndef CONF_GCLK_GEN_1_OE
-#define CONF_GCLK_GEN_1_OE 0
+#define CONF_GCLK_GEN_1_OE 1
 #endif
 
 // <q> Output Off Value
@@ -142,7 +142,7 @@
 // <i> This defines the clock source for generic clock generator 1
 // <id> gclk_gen_1_oscillator
 #ifndef CONF_GCLK_GEN_1_SRC
-#define CONF_GCLK_GEN_1_SRC GCLK_GENCTRL_SRC_XOSC
+#define CONF_GCLK_GEN_1_SRC GCLK_GENCTRL_SRC_OSC8M
 #endif
 // </h>
 
@@ -243,7 +243,7 @@
 // <i> Indicates whether Run in Standby is enabled or not
 // <id> gclk_arch_gen_3_RUNSTDBY
 #ifndef CONF_GCLK_GEN_3_RUNSTDBY
-#define CONF_GCLK_GEN_3_RUNSTDBY 0
+#define CONF_GCLK_GEN_3_RUNSTDBY 1
 #endif
 
 // <q> Divide Selection
@@ -257,7 +257,7 @@
 // <i> Indicates whether Output Enable is enabled or not
 // <id> gclk_arch_gen_3_oe
 #ifndef CONF_GCLK_GEN_3_OE
-#define CONF_GCLK_GEN_3_OE 0
+#define CONF_GCLK_GEN_3_OE 1
 #endif
 
 // <q> Output Off Value

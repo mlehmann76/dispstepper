@@ -14,8 +14,8 @@ class stepCtrl {
     stepCtrl(uint32_t stepsPerTurn, float timerFreq);
     void cw(float speed, uint32_t steps);
     void ccw(float speed, uint32_t steps);
-    void func(uint32_t timerVal);
-    bool isRunning() const;
+    void func(uint16_t timerVal);
+    bool isRunning() const { return _steps ? true : false; }
     dir_t dir() const {return _dir;}
 
   private:
@@ -23,10 +23,9 @@ class stepCtrl {
     uint32_t _stepsPerTurn;
     dir_t _dir;
     uint32_t _steps;
-    uint32_t _lastTimerVal;
-    uint32_t _timerValPerStep;
+    uint16_t _lastTimerVal;
+    uint16_t _timerValPerStep;
     uint8_t _stepIndex;
 };
-
 
 #endif // !__STEPPER_H_

@@ -8,7 +8,7 @@
 
 static constexpr int MODES = 3;
 static constexpr int MAXLEVEL = 3;
-static constexpr int TIMEOUT = 3;
+static constexpr int TIMEOUT = 3000;
 
 enum viewMode { ModeSingle = 0, ModeRepeat = 1, ModeManual = 2 };
 
@@ -18,7 +18,7 @@ public:
   using modeCbType = std::function<void(viewMode, uint32_t)>;
   using buttonCbType = std::function<void(TGpio, bool)>;
 
-      struct modeselect {
+  struct modeselect {
     void select(uint32_t tick) {
       isEnabled = true;
       count = tick;
@@ -35,6 +35,9 @@ public:
         m_modeIndex() {}
 
   void run(uint32_t tick) {
+    //
+    m_button.run(tick);
+    //
     if (m_modeSelect.isEnabled) {
       onModeButton(tick);
       onUpDownButton(tick);
@@ -45,8 +48,9 @@ public:
           m_modeChangeCb(m_mode, modeValue());
         }
       }
-    } else if (m_button.pressed(SW_MODE)) {
+    } else if (m_button.stateChanged(SW_MODE) && m_button.pressed(SW_MODE)) {
       m_modeSelect.select(tick + TIMEOUT);
+      m_led.set(m_mode, single{});
     } else {
       checkbuttons();
     }
@@ -57,7 +61,7 @@ public:
     if (m_buttonChangeCb) {
       for (auto b : buttons) {
         if (m_button.stateChanged(b)) {
-          m_buttonChangeCb(b, m_button.state(b));
+          m_buttonChangeCb(b, m_button.state(b) == buttonCheckType::bpressed);
         }
       }
     }
@@ -66,13 +70,11 @@ public:
   void registerModeCb(modeCbType &&cb) { m_modeChangeCb = cb; }
   void registerButtonCb(buttonCbType &&cb) { m_buttonChangeCb = cb; }
 
-  uint32_t modeValue() const {
-    return m_modeIndex[m_mode];
-  }
+  uint32_t modeValue() const { return m_modeIndex[m_mode]; }
 
 private:
   void onModeButton(uint32_t tick) {
-    if (m_button.pressed(SW_MODE)) {
+    if (m_button.stateChanged(SW_MODE) && m_button.pressed(SW_MODE)) {
       switch (m_mode) {
       case ModeSingle:
         m_mode = ModeRepeat;
@@ -85,20 +87,22 @@ private:
         break;
       };
       m_led.set(m_mode, single{});
-      m_modeSelect.select(tick + TIMEOUT); 
+      m_modeSelect.select(tick + TIMEOUT);
     }
   }
   //
   void onUpDownButton(uint32_t tick) {
-    if (m_button.pressed(SW_UP) && m_modeIndex[m_mode] < MAXLEVEL) {
+    if (m_button.stateChanged(SW_UP) && m_button.pressed(SW_UP) &&
+        m_modeIndex[m_mode] < MAXLEVEL) {
       m_modeIndex[m_mode]++;
       m_led.set(m_modeIndex[m_mode], bar{});
-      m_modeSelect.select(tick + TIMEOUT); 
+      m_modeSelect.select(tick + TIMEOUT);
     }
-    if (m_button.pressed(SW_DOWN) && m_modeIndex[m_mode] > 0) {
+    if (m_button.stateChanged(SW_DOWN) && m_button.pressed(SW_DOWN) &&
+        m_modeIndex[m_mode] > 0) {
       m_modeIndex[m_mode]--;
       m_led.set(m_modeIndex[m_mode], bar{});
-      m_modeSelect.select(tick + TIMEOUT); 
+      m_modeSelect.select(tick + TIMEOUT);
     }
   }
 

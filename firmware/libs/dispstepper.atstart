@@ -293,14 +293,14 @@ drivers:
           slow_gclk_selection: Generic clock generator 3
   TIMER_0:
     user_label: TIMER_0
-    definition: Atmel:SAMD21D_Drivers:0.0.1::SAMD21E17D-AF::TC3::driver_config_definition::32-bit.Counter.Mode::Lite:TC:Timer
+    definition: Atmel:SAMD21D_Drivers:0.0.1::SAMD21E17D-AF::TC3::driver_config_definition::16-bit.Counter.Mode::Lite:TC:Timer
     functionality: Timer
     api: Lite:TC:Timer
     configuration:
       cc_cc0: 0
       cc_cc1: 0
       cc_control: false
-      count_control: true
+      count_control: false
       count_count: 0
       ctrla_control: true
       ctrla_enable: true

@@ -8,14 +8,17 @@ typedef struct {
 } gpioState_t;
 
 static const gpioState_t state[STEPS][4] = {
-    {{AIN1, 0}, {AIN2, 0}, {BIN2, 0}, {BIN1, 1}},
-    {{AIN1, 0}, {AIN2, 0}, {BIN2, 1}, {BIN1, 1}},
-    {{AIN1, 0}, {AIN2, 0}, {BIN2, 1}, {BIN1, 0}},
-    {{AIN1, 0}, {AIN2, 1}, {BIN2, 1}, {BIN1, 0}},
-    {{AIN1, 0}, {AIN2, 1}, {BIN2, 0}, {BIN1, 0}},
+    {{AIN1, 0}, {AIN2, 1}, {BIN2, 0}, {BIN1, 1}},
+    {{AIN1, 0}, {AIN2, 1}, {BIN2, 0}, {BIN1, 1}},
+    //
     {{AIN1, 1}, {AIN2, 1}, {BIN2, 0}, {BIN1, 0}},
-    {{AIN1, 1}, {AIN2, 0}, {BIN2, 0}, {BIN1, 0}},
-    {{AIN1, 1}, {AIN2, 0}, {BIN2, 0}, {BIN1, 1}},
+    {{AIN1, 1}, {AIN2, 1}, {BIN2, 0}, {BIN1, 0}},
+    //
+    {{AIN1, 1}, {AIN2, 0}, {BIN2, 1}, {BIN1, 0}},
+    {{AIN1, 1}, {AIN2, 0}, {BIN2, 1}, {BIN1, 0}},
+    //
+    {{AIN1, 0}, {AIN2, 0}, {BIN2, 1}, {BIN1, 1}},
+    {{AIN1, 0}, {AIN2, 0}, {BIN2, 1}, {BIN1, 1}},
 };
 
 static void setStep(int num) {
@@ -53,13 +56,13 @@ void stepCtrl::ccw(float speedHz, uint32_t steps) {
   _timerValPerStep = _timerFreq / (speedHz * _stepsPerTurn);
 }
 
-void stepCtrl::func(uint32_t timerVal) {
+void stepCtrl::func(uint16_t timerVal) {
   if (_steps) {
     if (_lastTimerVal == 0) {
       _lastTimerVal = timerVal; // update TimerVal after start
     } else {
-      if (timerVal > (_lastTimerVal + _timerValPerStep)) {
-        _lastTimerVal = timerVal + _timerValPerStep;
+      if ((uint16_t)(timerVal - _lastTimerVal) > _timerValPerStep) {
+        _lastTimerVal = timerVal;
         setStep(_stepIndex);
         if (_dir == CCW) {
           _stepIndex = _stepIndex == 7 ? 0 : _stepIndex + 1;
@@ -74,4 +77,3 @@ void stepCtrl::func(uint32_t timerVal) {
   }
 }
 
-bool stepCtrl::isRunning() const { return _steps ? true : false; }

@@ -10,11 +10,11 @@ uint32_t getTick() {
     return tick;
 }
 
-void SysTick_Init() {
+void SysTick_Init(uint32_t cpuFreq) {
 tick = 0;
   // Configure SysTick to trigger every millisecond using the CPU Clock
   SysTick->CTRL = 0;     // Disable the SysTick Module
-  SysTick->LOAD = 4799UL; // Set the Reload Register for 1mS interrupts
+  SysTick->LOAD = (cpuFreq/1000)-1; // Set the Reload Register for 1mS interrupts
   NVIC_SetPriority(SysTick_IRQn,
                    3); // Set the interrupt priority to least urgency
   SysTick->VAL = 0;    // Clear the Current Value register

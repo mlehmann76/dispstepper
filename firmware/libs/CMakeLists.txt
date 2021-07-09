@@ -58,7 +58,7 @@ PUBLIC
     ${HPL_PATH}/pm/hpl_pm.c
     ${HPL_PATH}/sercom/hpl_sercom.c
     ${HPL_PATH}/sysctrl/hpl_sysctrl.c
-    ${HPL_PATH}/tc/hpl_tc.c
+    ${HPL_PATH}/tc/tc_lite.c
     ${HPL_PATH}/usb/hpl_usb.c
     ${ATMEL_PATH}/persistent_storage/nv_internal_flash_ultra.c
     ${ATMEL_PATH}/persistent_storage/nv_storage.c

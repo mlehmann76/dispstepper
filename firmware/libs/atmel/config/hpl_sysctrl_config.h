@@ -84,7 +84,7 @@
 // <i> Default: No Prescaling
 // <id> osc8m_presc
 #ifndef CONF_OSC8M_PRESC
-#define CONF_OSC8M_PRESC SYSCTRL_OSC8M_PRESC_3_Val
+#define CONF_OSC8M_PRESC SYSCTRL_OSC8M_PRESC_0_Val
 #endif
 
 // <q> Overwrite Default Osc Calibration
@@ -142,7 +142,7 @@
 // <i> Enable 32 Khz Output
 // <id> osc32k_arch_en32k
 #ifndef CONF_OSC32K_EN32K
-#define CONF_OSC32K_EN32K 0
+#define CONF_OSC32K_EN32K 1
 #endif
 
 // <q> Enable 1K
@@ -172,7 +172,7 @@
 // <i> Default: 10 Clock Cycles (305us)
 // <id> osc32k_arch_startup
 #ifndef CONF_OSC32K_STARTUP
-#define CONF_OSC32K_STARTUP CONF_OSC_STARTUP_TIME_92MCS
+#define CONF_OSC32K_STARTUP CONF_OSC_STARTUP_TIME_3967MCS
 #endif
 
 // <q> Overwrite Default Osc Calibration
@@ -440,7 +440,7 @@
 // <i> Indicates whether Wait Lock is Enables or not
 // <id> dfll48m_arch_waitlock
 #ifndef CONF_DFLL_WAITLOCK
-#define CONF_DFLL_WAITLOCK 0
+#define CONF_DFLL_WAITLOCK 1
 #endif
 
 // <q> Bypass Coarse Lock
@@ -486,7 +486,7 @@
 // <i> USB Clock Recovery Mode
 // <id> dfll48m_arch_usbcrm
 #ifndef CONF_DFLL_USBCRM
-#define CONF_DFLL_USBCRM 0
+#define CONF_DFLL_USBCRM 1
 #endif
 
 #if CONF_DFLL_USBCRM == 1

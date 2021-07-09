@@ -1,9 +1,10 @@
+
 /**
  * \file
  *
- * \brief HPL initialization related functionality implementation.
+ * \brief TC related functionality declaration.
  *
- * Copyright (c) 2014-2018 Microchip Technology Inc. and its subsidiaries.
+ * Copyright (c) 2017 Microchip Technology Inc. and its subsidiaries.
  *
  * \asf_license_start
  *
@@ -31,39 +32,33 @@
  *
  */
 
-#include <hpl_gpio.h>
-#include <hpl_init.h>
-#include <hpl_gclk_base.h>
-#include <hpl_pm_config.h>
-#include <hpl_pm_base.h>
+#ifndef _TC_H_INCLUDED
+#define _TC_H_INCLUDED
 
-#include <hpl_dma.h>
-#include <hpl_dmac_config.h>
-
-/* Referenced GCLKs (out of 0~7), should be initialized firstly
- */
-#define _GCLK_INIT_1ST 0x00000000
-/* Not referenced GCLKs, initialized last */
-#define _GCLK_INIT_LAST 0x000000FF
+#include <compiler.h>
+#include <utils_assert.h>
 
 /**
- * \brief Initialize the hardware abstraction layer
+ * \addtogroup tc driver
+ *
+ * \section tc Revision History
+ * - v0.0.0.1 Initial Commit
+ *
+ *@{
  */
-void _init_chip(void)
-{
-	hri_nvmctrl_set_CTRLB_RWS_bf(NVMCTRL, CONF_NVM_WAIT_STATE);
 
-	_pm_init();
-	_sysctrl_init_sources();
-#if _GCLK_INIT_1ST
-	_gclk_init_generators_by_fref(_GCLK_INIT_1ST);
+#ifdef __cplusplus
+extern "C" {
 #endif
-	_sysctrl_init_referenced_generators();
-	_gclk_init_generators_by_fref(_GCLK_INIT_LAST);
 
-#if CONF_DMAC_ENABLE
-	_pm_enable_bus_clock(PM_BUS_AHB, DMAC);
-	_pm_enable_bus_clock(PM_BUS_APBB, DMAC);
-	_dma_init();
-#endif
+/**
+ * \brief Initialize tc interface
+ * \return Initialization status.
+ */
+int8_t TIMER_0_init();
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* _TC_H_INCLUDED */

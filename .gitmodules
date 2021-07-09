@@ -1,0 +1,3 @@
+[submodule "uf2-samdx1"]
+	path = uf2-samdx1
+	url = https://github.com/mlehmann76/uf2-samdx1.git
