@@ -11,7 +11,7 @@
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
-            "debugServerArgs": "-f interface/@OPENOCD_INTERFACE@ -f target/@OPENOCD_TARGET@",
+            "debugServerArgs": "-device atsamd21e17 -if swd",
             "serverLaunchTimeout": 20000,
             "filterStderr": true,
             "filterStdout": false,
@@ -20,7 +20,8 @@
                 { "text": "cd ${workspaceRoot}/build" },
                 { "text": "file @PROJECT_NAME@", "description": "load file", "ignoreFailures": false},
                 { "text": "target extended-remote localhost:3333", "description": "connect to target", "ignoreFailures": false },
-                { "text": "monitor reset halt", "description": "perform a reset and halt the target", "ignoreFailures": false },
+                { "text": "monitor reset", "description": "perform a reset and halt the target", "ignoreFailures": false },
+                { "text": "monitor halt", "description": "perform a reset and halt the target", "ignoreFailures": false },
                 { "text": "load", "description": "flash target", "ignoreFailures": false },
                 { "text": "set output-radix 16", "description": "set the default numeric base to 16", "ignoreFailures": false }
             ],
@@ -33,7 +34,19 @@
             },
             "MIMode": "gdb",
             "miDebuggerPath": "@GDB_BIN@",
-            "debugServerPath": "@OPENOCD_BIN@"
+            "debugServerPath": "/home/marco/JLink_Linux_V700a_x86_64/JLinkGDBServer"
+        }
+        {
+            "name": "Cortex Debug",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/build/@PROJECT_NAME@",
+            "request": "launch",
+            "type": "cortex-debug",
+            "serverpath": "/home/marco/JLink_Linux_V700a_x86_64/JLinkGDBServerCLExe",
+            "servertype": "jlink",
+            "device": "atsamd21e17",
+            "interface": "swd",
+            "runToMain": true
         }
     ]
 }

@@ -51,7 +51,7 @@ endfunction()
 function(generate_vscode_launch_openocd TARGET)
     get_target_property( TARGET_NAME ${TARGET} NAME )
 
-    set(OPENOCD_INTERFACE cmsis-dap.cfg)
+    set(OPENOCD_INTERFACE jlink.cfg)
     set(OPENOCD_TARGET at91samdXX.cfg)
 
     configure_file(${CURRENT_MODULE_DIR}/launch.json.in ${CMAKE_SOURCE_DIR}/.vscode/launch.json @ONLY)
