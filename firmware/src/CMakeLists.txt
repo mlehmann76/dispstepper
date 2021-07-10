@@ -11,6 +11,7 @@ target_sources(${PROJECT_NAME}
         stepper.cpp
         board.cpp
         control.cpp
+        config.cpp
     PUBLIC
 )
 

@@ -1,4 +1,5 @@
 #include "board.h"
+#include "config.h"
 #include "control.h"
 #include "leds.h"
 #include "mode.h"
@@ -18,10 +19,11 @@ int main(void) {
   /* Initializes MCU, drivers and middleware */
   atmel_start_init();
   SysTick_Init(48e6);
-
+  
+  Config config;
   stepCtrl step = {4096, 3e6};
-  modeType mode;
-  control ctrl = {&step};
+  modeType mode(&config);
+  control ctrl = {&config, & step};
   mode.registerModeCb(std::bind(&control::onModeChange, &ctrl, _1, _2));
   mode.registerButtonCb(std::bind(&control::onButtonChange<uint8_t>, &ctrl, _1, _2));
   gpio_set_pin_level(nSLEEP, 1);

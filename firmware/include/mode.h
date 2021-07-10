@@ -2,15 +2,11 @@
 #define __MODE_H_
 
 #include "board.h"
+#include "config.h"
 #include "leds.h"
 #include "user_board.h"
+#include <cstdint>
 #include <functional>
-
-static constexpr int MODES = 3;
-static constexpr int MAXLEVEL = 3;
-static constexpr int TIMEOUT = 3000;
-
-enum viewMode { ModeSingle = 0, ModeRepeat = 1, ModeManual = 2 };
 
 template <typename TGpio, typename buttonCheckType, typename ledViewType>
 class mode {
@@ -30,9 +26,12 @@ public:
   };
 
 public:
-  constexpr mode()
-      : m_button{}, m_led{}, m_mode(ModeSingle), m_modeSelect{true, 0},
-        m_modeIndex() {}
+  constexpr mode(Config *_c)
+      : m_button{}, m_led{}, m_mode(_c->get<viewMode>(Config::IDX_Mode)),
+        m_config(_c), m_modeSelect{true, 0},
+        m_modeIndex{_c->get<uint32_t>(Config::IDX_ModeSingleIdx),
+                    _c->get<uint32_t>(Config::IDX_ModeRepeatIdx),
+                    _c->get<uint32_t>(Config::IDX_ModeManualIdx)} {}
 
   void run(uint32_t tick) {
     //
@@ -109,6 +108,7 @@ private:
   buttonCheckType m_button;
   ledViewType m_led;
   viewMode m_mode;
+  Config *m_config;
   modeselect m_modeSelect;
   uint32_t m_modeIndex[MODES];
   modeCbType m_modeChangeCb;
