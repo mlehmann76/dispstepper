@@ -10,7 +10,7 @@ class control {
   typedef enum { SIDLE, SDIRCW, SDIRCCW, SRUN, SRETRACT } state_t;
 
 public:
-  control(Config* _c, stepCtrl* _s);
+  control(Config *_c, stepCtrl *_s);
   //
   void run();
   //
@@ -21,8 +21,9 @@ private:
   void onModeSingleRepeat();
   void onModeManual();
   float modeValue() const;
+  void update();
 
-  Config* m_config;
+  Config *m_config;
   stepCtrl *m_stepper;
   state_t sstate;
   viewMode m_mode;

@@ -30,6 +30,7 @@ int main(void) {
 
   /* Replace with your application code */
   while (1) {
+    config.run(getTick());
     mode.run(getTick());
     ctrl.run();
     step.func(hri_tccount16_read_COUNT_reg(TC3));

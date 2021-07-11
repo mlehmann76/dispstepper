@@ -2,8 +2,6 @@
 #include "config.h"
 #include "stepper.h"
 
-#define BUTTON_STEPS 256
-
 control::control(Config *_c, stepCtrl *_s)
     : m_config(_c), m_stepper(_s), sstate(SIDLE),
       m_mode(_c->get<viewMode>(Config::IDX_Mode)),
@@ -38,10 +36,25 @@ float control::modeValue() const {
   }
 }
 //
+void control::update() {
+  switch (m_mode) {
+  case ModeRepeat:
+    m_config->set(m_config->toIndex(Config::IDX_ModeRepeatIdx), m_modeIndex);
+    break;
+  case ModeSingle:
+    m_config->set(m_config->toIndex(Config::IDX_ModeSingleIdx), m_modeIndex);
+    break;
+  default:
+    m_config->set(m_config->toIndex(Config::IDX_ModeManualIdx), m_modeIndex);
+    break;
+  }
+}
+//
 void control::onModeChange(viewMode m, uint32_t v) {
   m_mode = m;
-  sstate = SIDLE;
   m_modeIndex = v;
+  update();
+  sstate = SIDLE;
   m_stepper->cw(0.0, 0);
 }
 //
@@ -54,7 +67,7 @@ void control::onModeSingleRepeat() {
   switch (sstate) {
   case SIDLE:
     if (m_lastButton == SW_SEL && m_lastButtonState == true) {
-      m_stepper->cw(modeValue(), BUTTON_STEPS);
+      m_stepper->cw(SPEED, modeValue());
       m_lastButton = -1;
       sstate = SDIRCW;
     }
@@ -67,17 +80,17 @@ void control::onModeSingleRepeat() {
       sstate = SRUN;
       break;
     }
-    if (!m_stepper->isRunning()) {
-      m_stepper->cw(modeValue(), BUTTON_STEPS);
+    if (m_mode == ModeRepeat && !m_stepper->isRunning()) {
+      m_stepper->cw(SPEED, modeValue());
     }
     break;
 
   case SRUN:
     if (!m_stepper->isRunning()) {
       if (m_stepper->dir() == stepCtrl::CW) {
-        m_stepper->ccw(modeValue(), BUTTON_STEPS / 16);
+        m_stepper->ccw(SPEED, modeValue() / 16);
       } else {
-        m_stepper->cw(modeValue(), BUTTON_STEPS / 16);
+        m_stepper->cw(SPEED, modeValue() / 16);
       }
       sstate = SRETRACT;
     }

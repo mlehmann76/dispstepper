@@ -104,6 +104,7 @@ private:
       m_modeSelect.select(tick + TIMEOUT);
     }
   }
+  //
 
   buttonCheckType m_button;
   ledViewType m_led;
