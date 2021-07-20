@@ -21,7 +21,6 @@ string(TOUPPER ${My_Project_Title} My_Project_Title_Caps  )
 string(REGEX REPLACE " " "_" My_Project_Title_Caps ${My_Project_Title_Caps} )
 
 set(CMAKE_CXX_STANDARD 17)
-set(TOOLCHAIN_PREFIX "/home/marco/gcc-arm-none-eabi-10-2020-q4-major/")
 set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/libs/atmel/samd21d/gcc/gcc/samd21e17d_flash.ld")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${LINKER_SCRIPT}")
 set_target_properties(${TARGET_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
