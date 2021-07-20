@@ -23,9 +23,9 @@
 #---------------------------------------------------------------------------------------
 # Set tools
 #---------------------------------------------------------------------------------------
-set(CMAKE_OBJCOPY ${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN}-objcopy${TOOLCHAIN_EXT})
-set(CMAKE_OBJDUMP ${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN}-objdump${TOOLCHAIN_EXT})
-set(CMAKE_SIZE ${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN}-size${TOOLCHAIN_EXT})
+set(CMAKE_OBJCOPY ${TOOLCHAIN}-objcopy${TOOLCHAIN_EXT})
+set(CMAKE_OBJDUMP ${TOOLCHAIN}-objdump${TOOLCHAIN_EXT})
+set(CMAKE_SIZE ${TOOLCHAIN}-size${TOOLCHAIN_EXT})
 
 
 #---------------------------------------------------------------------------------------
