@@ -42,8 +42,12 @@ jobs:
     - name: Bin2UF
       working-directory: ${{github.workspace}}/firmware/build
       run: node ../scripts/bin2uf2.js dispstepper.bin dispstepper.uf2
-      
+    
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+  
     - name: Rename
       working-directory: ${{github.workspace}}/firmware/build
-      run: mv -v dispstepper.uf2 dispstepper-`git describe --tags HEAD`.uf
+      run: mv -v dispstepper.uf2 dispstepper-${{ steps.get_version.outputs.VERSION }}.uf
       
