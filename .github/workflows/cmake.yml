@@ -44,9 +44,10 @@ jobs:
       run: node ../scripts/bin2uf2.js dispstepper.bin dispstepper.uf2
     
     - name: Get the version
-      run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-  
+      id: get_version
+      uses: battila7/get-version-action@v2
+      
     - name: Rename
       working-directory: ${{github.workspace}}/firmware/build
-      run: mv -v dispstepper.uf2 dispstepper_${{ env.TAG }}.uf
+      run: mv -v dispstepper.uf2 dispstepper_${{ steps.get_version.outputs.version }}.uf
       
