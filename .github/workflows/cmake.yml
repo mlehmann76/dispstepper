@@ -41,7 +41,7 @@ jobs:
     
     - name: Bin2UF
       working-directory: ${{github.workspace}}/firmware/build
-      run: node ../../uf2-samd21x/scripts/bin2uf2.js dispstepper.bin dispstepper.uf2
+      run: node ../scripts/bin2uf2.js dispstepper.bin dispstepper.uf2
       
     - name: Rename
       working-directory: ${{github.workspace}}/firmware/build
