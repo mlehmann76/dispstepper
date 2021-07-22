@@ -2,9 +2,8 @@ name: CMake
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - '*'
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -49,5 +48,16 @@ jobs:
       
     - name: Rename
       working-directory: ${{github.workspace}}/firmware/build
-      run: mv -v dispstepper.uf2 dispstepper_${{ steps.get_version.outputs.version }}.uf
+      run: mv -v dispstepper.bin dispstepper_${{ steps.get_version.outputs.version }}.bin && 
+           mv -v dispstepper.hex dispstepper_${{ steps.get_version.outputs.version }}.hex &&
+           mv -v dispstepper.uf2 dispstepper_${{ steps.get_version.outputs.version }}.uf2
       
+    - name: "Pre Release"
+      uses: softprops/action-gh-release@v1
+      with:
+          files: |
+            ${{github.workspace}}/firmware/build/dispstepper_${{ steps.get_version.outputs.version }}.bin
+            ${{github.workspace}}/firmware/build/dispstepper_${{ steps.get_version.outputs.version }}.hex
+            ${{github.workspace}}/firmware/build/dispstepper_${{ steps.get_version.outputs.version }}.uf2
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
