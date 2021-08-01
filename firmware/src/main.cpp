@@ -5,6 +5,7 @@
 #include "mode.h"
 #include "stepper.h"
 #include "user_board.h"
+#include "usb_cdc.h"
 #include <atmel_start.h>
 #include <functional>
 #include <stdint.h>
@@ -18,8 +19,9 @@ using namespace std::placeholders;
 int main(void) {
   /* Initializes MCU, drivers and middleware */
   atmel_start_init();
+  cdcd_acm_example();
   SysTick_Init(48e6);
-  
+
   Config config;
   stepCtrl step = {4096, 3e6};
   modeType mode(&config);
@@ -34,5 +36,6 @@ int main(void) {
     mode.run(getTick());
     ctrl.run();
     step.func(hri_tccount16_read_COUNT_reg(TC3));
+    usb_service();
   }
 }

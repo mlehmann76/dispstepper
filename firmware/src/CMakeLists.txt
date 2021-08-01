@@ -12,6 +12,7 @@ target_sources(${PROJECT_NAME}
         board.cpp
         control.cpp
         config.cpp
+        usb_cdc.cpp
     PUBLIC
 )
 

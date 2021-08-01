@@ -23,8 +23,8 @@ middlewares:
     user_label: PERSISTENT_STORAGE_0
     configuration:
       conf_max_item_number: 10
-      conf_sector_size: 4096
-      conf_storage_memory_start: 65536
+      conf_sector_size: 2048
+      conf_storage_memory_start: 126976
     definition: Atmel:PERSISTENT_STORAGE:0.0.1::Internal_Flash_Persistent_storage
     functionality: Persistent_Storage
     api: Persistent-Storage:Internal-Flash-Ultra:Core

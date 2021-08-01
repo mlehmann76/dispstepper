@@ -1,0 +1,4 @@
+# Atmel Samd21 uf2 bootloader
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", GROUP="users", MODE="0666", TEST=="power/control", ATTR{power/control}="on"
+# Atmel Samd21 dispstepper board
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2404", GROUP="users", MODE="0666", TEST=="power/control", ATTR{power/control}="on"

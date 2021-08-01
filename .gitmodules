@@ -1,3 +1,6 @@
 [submodule "uf2-samdx1"]
 	path = uf2-samdx1
 	url = https://github.com/mlehmann76/uf2-samdx1.git
+[submodule "firmware/libs/simpleparser"]
+	path = firmware/libs/simpleparser
+	url = git@github.com:mlehmann76/simpleparser.git

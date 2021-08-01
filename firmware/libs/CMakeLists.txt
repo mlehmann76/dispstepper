@@ -33,7 +33,6 @@ PUBLIC
     ${ATMEL_PATH}/atmel_start.c
     ${ATMEL_PATH}/driver_init.c
     ${ATMEL_PATH}/persistent_storage_start.c
-    ${ATMEL_PATH}/usb_start.c
     ${ATMEL_PATH}/usb/usb_protocol.c
     ${ATMEL_PATH}/usb/device/usbdc.c
     ${ATMEL_PATH}/usb/class/cdc/device/cdcdf_acm.c
