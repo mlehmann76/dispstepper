@@ -1,9 +1,10 @@
-name: CMake
+name: Build
 
 on:
   push:
-    tags:
-      - '*'
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -18,7 +19,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
     - uses: fiam/arm-none-eabi-gcc@v1
       with:
           release: '10-2020-q4' # The arm-none-eabi-gcc release to use.
@@ -37,27 +41,3 @@ jobs:
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
-    
-    - name: Bin2UF
-      working-directory: ${{github.workspace}}/firmware/build
-      run: node ../scripts/bin2uf2.js dispstepper.bin dispstepper.uf2
-    
-    - name: Get the version
-      id: get_version
-      uses: battila7/get-version-action@v2
-      
-    - name: Rename
-      working-directory: ${{github.workspace}}/firmware/build
-      run: mv -v dispstepper.bin dispstepper_${{ steps.get_version.outputs.version }}.bin && 
-           mv -v dispstepper.hex dispstepper_${{ steps.get_version.outputs.version }}.hex &&
-           mv -v dispstepper.uf2 dispstepper_${{ steps.get_version.outputs.version }}.uf2
-      
-    - name: "Pre Release"
-      uses: softprops/action-gh-release@v1
-      with:
-          files: |
-            ${{github.workspace}}/firmware/build/dispstepper_${{ steps.get_version.outputs.version }}.bin
-            ${{github.workspace}}/firmware/build/dispstepper_${{ steps.get_version.outputs.version }}.hex
-            ${{github.workspace}}/firmware/build/dispstepper_${{ steps.get_version.outputs.version }}.uf2
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
