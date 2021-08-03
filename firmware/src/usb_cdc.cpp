@@ -5,8 +5,8 @@
  * Please copy examples or other code you want to keep to a separate file or
  * main.c to avoid loosing it when reconfiguring.
  */
-#include "atmel_start.h"
 #include "usb_cdc.h"
+#include "atmel_start.h"
 
 #if CONF_USBD_HS_SP
 static uint8_t single_desc_bytes[] = {
@@ -30,7 +30,6 @@ static struct usbd_descriptors single_desc[] = {
     {single_desc_bytes_hs, single_desc_bytes_hs + sizeof(single_desc_bytes_hs)}
 #endif
 };
-
 
 /** Ctrl endpoint buffer */
 static uint8_t ctrl_buffer[64];
@@ -132,15 +131,20 @@ void cdcd_acm_example(void) {
                               (FUNC_PTR)usb_device_cb_state_c);
 }
 
-void usb_service() {
+void usb_service(char *ret, size_t *len) {
+  if (len && ret) {
+    *len = 0;
     if (cdcConnected) {
       char input;
       if (cdcRead(&input, 1) == 1) {
         cdcWrite("Got: ", 5);
         cdcWrite(&input, 1);
         cdcWrite("\r\n", 2);
+        *len = 1;
+        *ret = input;
       }
-    }    
+    }
+  }
 }
 
 void usb_init(void) { cdc_device_acm_init(); }

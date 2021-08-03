@@ -10,7 +10,7 @@ extern "C" {
 
 void cdcd_acm_example(void);
 void cdc_device_acm_init(void);
-void usb_service();
+void usb_service(char *ret, size_t *len);
 
 /**
  * \berif Initialize USB

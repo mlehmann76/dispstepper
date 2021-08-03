@@ -13,6 +13,7 @@ target_sources(${PROJECT_NAME}
         control.cpp
         config.cpp
         usb_cdc.cpp
+        cmdparse.cpp
     PUBLIC
 )
 
@@ -34,4 +35,5 @@ PUBLIC
     ${ATMEL_PATH}/persistent_storage
     ${ATMEL_PATH}/usb
     ${ATMEL_PATH}/examples
+    ${CMAKE_SOURCE_DIR}/libs/simpleparser/include
 )
