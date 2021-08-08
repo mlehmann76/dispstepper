@@ -7,6 +7,8 @@
  */
 #include "usb_cdc.h"
 #include "atmel_start.h"
+#include "cdcdf_acm.h"
+#include "cdcdf_acm_desc.h"
 
 #if CONF_USBD_HS_SP
 static uint8_t single_desc_bytes[] = {
@@ -33,10 +35,11 @@ static struct usbd_descriptors single_desc[] = {
 
 /** Ctrl endpoint buffer */
 static uint8_t ctrl_buffer[64];
-volatile bool cdcTransferRead = false;
-volatile uint32_t cdcTransferReadLen;
-volatile bool cdcTransferWrite = false;
-volatile bool cdcConnected = false;
+static bool cdcTransferRead = false;
+static uint32_t cdcTransferReadLen;
+static bool cdcTransferWrite = false;
+static bool cdcConnected = false;
+static bool cdcInitialized = false;
 
 static bool cdcWriteDone(const uint8_t ep, const enum usb_xfer_code rc,
                          const uint32_t count) {
@@ -70,7 +73,7 @@ static int32_t cdcWrite(const char *const buf, const uint16_t length) {
   for (const char *p = buf; p < end && cdcConnected; ++p) {
     outBuf[outLen++] = *p;
 
-    if (*p == '\n' || outLen == sizeof(outBuf)) {
+    if (*p == '\n' || *p == '\r' || outLen == sizeof(outBuf)) {
       cdcTransferWrite = true;
       cdcdf_acm_write(outBuf, outLen);
       while (cdcTransferWrite && cdcConnected)
@@ -112,39 +115,41 @@ void cdc_device_acm_init(void) {
   usbdc_attach();
 }
 
-/**
- * Example of using CDC ACM Function.
- * \note
- * In this example, we will use a PC as a USB host:
- * - Connect the DEBUG USB on XPLAINED board to PC for program download.
- * - Connect the TARGET USB on XPLAINED board to PC for running program.
- * The application will behave as a virtual COM.
- * - Open a HyperTerminal or other COM tools in PC side.
- * - Send out a character or string and it will echo the content received.
- */
-void cdcd_acm_example(void) {
-  while (!cdcdf_acm_is_enabled()) {
-    // wait cdc acm to be installed
-  };
-
-  cdcdf_acm_register_callback(CDCDF_ACM_CB_STATE_C,
-                              (FUNC_PTR)usb_device_cb_state_c);
-}
-
-void usb_service(char *ret, size_t *len) {
-  if (len && ret) {
-    *len = 0;
-    if (cdcConnected) {
-      char input;
-      if (cdcRead(&input, 1) == 1) {
-        cdcWrite("Got: ", 5);
-        cdcWrite(&input, 1);
-        cdcWrite("\r\n", 2);
-        *len = 1;
-        *ret = input;
+static void usb_cdc_service(char *ret, const size_t maxLen, size_t *len) {
+  *len = 0;
+  if (cdcInitialized) {
+    if (len && ret) {
+      if (cdcConnected) {
+        size_t l;
+        if ((l = cdcRead(ret, maxLen)) ) {
+          cdcWrite(ret, l);
+          *len = l;
+        }
       }
+    }
+  } else {
+    if (cdcdf_acm_is_enabled()) {
+      cdcdf_acm_register_callback(CDCDF_ACM_CB_STATE_C,
+                                  (FUNC_PTR)usb_device_cb_state_c);
+      cdcInitialized = true;
     }
   }
 }
 
 void usb_init(void) { cdc_device_acm_init(); }
+
+/*
+*/
+
+void usb_cdc_wrapper::read() {
+  usb_cdc_service(m_buf, sizeof(m_buf), &m_readlen);
+  if (m_readlen && m_readcb) {
+    for (size_t i=0;i<m_readlen;i++) {
+      m_readcb(m_buf[i]);
+    }
+  }
+}
+
+void usb_cdc_wrapper::write(const char *buf, const size_t len) {
+  cdcWrite(buf, len);
+}

@@ -5,14 +5,14 @@
 #include "config.h"
 #include "leds.h"
 #include "user_board.h"
+#include "inplace_function.h"
 #include <cstdint>
-#include <functional>
 
 template <typename TGpio, typename buttonCheckType, typename ledViewType>
 class mode {
 public:
-  using modeCbType = std::function<void(viewMode, uint32_t)>;
-  using buttonCbType = std::function<void(TGpio, bool)>;
+  using modeCbType = stdext::inplace_function<void(viewMode, uint32_t)>;
+  using buttonCbType = stdext::inplace_function<void(TGpio, bool)>;
 
   struct modeselect {
     void select(uint32_t tick) {

@@ -6,38 +6,29 @@
 #include <array>
 
 class Config;
+class usb_cdc_wrapper;
 
 class CmdParse {
   static constexpr std::array<char, 2> crlf = {'\r', '\n'};
+  using link_type = simpleparser::KeywordPatternLink<char, 4>;
 
 public:
-  CmdParse(Config *_c);
+  CmdParse(Config &_c, usb_cdc_wrapper &u);
   void push(char c);
 
-  template <typename T> void service(T &);
+  void service();
+  Config& config() const;
+  usb_cdc_wrapper& cdc() const;
 
 private:
   void cleanup();
 
-  Config *m_pconfig;
+  Config& m_pconfig;
+  usb_cdc_wrapper& m_cdc;
   std::array<char, 64> m_buf;
   size_t m_bufIndex;
   bool m_hasLineEnd;
+  std::array<link_type, 2> m_scpi_cmd;
 };
 
-template <typename T> void CmdParse::service(T &cmd) {
-  if (m_hasLineEnd || m_bufIndex == (m_buf.size()-1)) {
-    auto p = std::find_first_of(m_buf.begin(), m_buf.end(), crlf.begin(),
-                                crlf.end());
-    auto diff = std::distance(m_buf.begin(), p);
-    if (diff) {
-      // parse
-      for (auto &l : cmd) {
-        l.match(std::string_view(m_buf.data(), diff)); // TODO
-      }
-    }
-    // cleanup
-    cleanup();
-  }
-}
 #endif // _COMMANDPARSE_MAIN
