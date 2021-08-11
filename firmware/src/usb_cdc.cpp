@@ -121,7 +121,7 @@ static void usb_cdc_service(char *ret, const size_t maxLen, size_t *len) {
     if (len && ret) {
       if (cdcConnected) {
         size_t l;
-        if ((l = cdcRead(ret, maxLen)) ) {
+        if ((l = cdcRead(ret, maxLen))) {
           cdcWrite(ret, l);
           *len = l;
         }
@@ -139,12 +139,12 @@ static void usb_cdc_service(char *ret, const size_t maxLen, size_t *len) {
 void usb_init(void) { cdc_device_acm_init(); }
 
 /*
-*/
+ */
 
 void usb_cdc_wrapper::read() {
   usb_cdc_service(m_buf, sizeof(m_buf), &m_readlen);
   if (m_readlen && m_readcb) {
-    for (size_t i=0;i<m_readlen;i++) {
+    for (size_t i = 0; i < m_readlen; i++) {
       m_readcb(m_buf[i]);
     }
   }
@@ -152,4 +152,8 @@ void usb_cdc_wrapper::read() {
 
 void usb_cdc_wrapper::write(const char *buf, const size_t len) {
   cdcWrite(buf, len);
+}
+
+void usb_cdc_wrapper::write(const std::string_view &s) {
+  cdcWrite(s.data(), s.size());
 }

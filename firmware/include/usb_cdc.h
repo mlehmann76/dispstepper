@@ -2,6 +2,7 @@
 #define USB_CDC_MAIN_H
 
 #include "inplace_function.h"
+#include <string>
 
 /**
  * \berif Initialize USB
@@ -23,6 +24,7 @@ public:
   void operator=(usb_cdc_wrapper&&) = delete;
   //
   void read();
+  void write(const std::string_view& s);
   void write(const char *buf, const size_t len);
   void set(readcd_type &&rcb) { m_readcb = rcb; }
 

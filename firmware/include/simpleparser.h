@@ -73,7 +73,8 @@ public:
       auto _k_part = _key_token.token();
       // std::cout << _m_part.first << " - " << _k_part.first << std::endl;
       // test for number
-      int withNumber = hasNumber(_k_part.first);
+      int numberCount = hasNumber(_k_part.first);
+      (void) numberCount; // not used yet
       // test for equality
       part_type _partRet = matchToken(_k_part.first, _m_part.first);
       m_return[m_last_index].num = _partRet.second;
@@ -167,8 +168,8 @@ private:
 template <typename TChar, int Size> class KeywordPatternLink {
 public:
   using StringType = std::basic_string_view<TChar>;
-  using getter_type = stdext::inplace_function<void()>;
-  using setter_type = stdext::inplace_function<void(StringType)>;
+  using getter_type = stdext::inplace_function<void(int)>;
+  using setter_type = stdext::inplace_function<void(StringType, int)>;
   using keyword_type = KeywordPattern<TChar, Size>;
 
   constexpr KeywordPatternLink(StringType &&pattern, getter_type &&getter)
@@ -187,10 +188,11 @@ public:
       int index = m_key.getSize() > 0 ? m_key.getSize() - 1 : 0;
 
       if (m_key.result(index).sym == '?' && m_getter) {
-        m_getter();
+        m_getter(m_key.result(index).num);
       }
       if (m_key.result(index).sym == ' ' && m_setter) {
-        m_setter(StringType{m_key.result(index + 1).rest});
+        m_setter(StringType{m_key.result(index + 1).rest},
+                 m_key.result(index).num);
       }
     }
     return ret;
