@@ -4,8 +4,8 @@
 
 control::control(Config *_c, stepCtrl *_s)
     : m_config(_c), m_stepper(_s), sstate(SIDLE),
-      m_mode(_c->get<viewMode>(Config::IDX_Mode)),
-      m_lastButton(-1), m_lastButtonState(false), m_modeIndex(0) {}
+      m_mode(_c->get<Config::IDX_Mode>()), m_lastButton(-1),
+      m_lastButtonState(false), m_modeIndex(0) {}
 //
 void control::run() {
   switch (m_mode) {
@@ -22,30 +22,56 @@ void control::run() {
 float control::modeValue() const {
   switch (m_mode) {
   case ModeRepeat:
-    return m_config->get<float>(
-        m_config->toIndex(Config::IDX_ModeRepeat0 + m_modeIndex));
+    switch (m_modeIndex) {
+    case 0:
+      return m_config->get<Config::IDX_ModeRepeat0>();
+    case 1:
+      return m_config->get<Config::IDX_ModeRepeat1>();
+    case 2:
+      return m_config->get<Config::IDX_ModeRepeat2>();
+    case 3:
+      return m_config->get<Config::IDX_ModeRepeat3>();
+    }
+    //
     break;
   case ModeSingle:
-    return m_config->get<float>(
-        m_config->toIndex(Config::IDX_ModeSingle0 + m_modeIndex));
+    switch (m_modeIndex) {
+    case 0:
+      return m_config->get<Config::IDX_ModeSingle0>();
+    case 1:
+      return m_config->get<Config::IDX_ModeSingle1>();
+    case 2:
+      return m_config->get<Config::IDX_ModeSingle2>();
+    case 3:
+      return m_config->get<Config::IDX_ModeSingle3>();
+    }
     break;
   default:
-    return m_config->get<float>(
-        m_config->toIndex(Config::IDX_ModeManual0 + m_modeIndex));
+    switch (m_modeIndex) {
+    case 0:
+      return m_config->get<Config::IDX_ModeManual0>();
+    case 1:
+      return m_config->get<Config::IDX_ModeManual1>();
+    case 2:
+      return m_config->get<Config::IDX_ModeManual2>();
+    case 3:
+      return m_config->get<Config::IDX_ModeManual3>();
+    }
     break;
   }
+  return 0;
 }
 //
 void control::update() {
   switch (m_mode) {
   case ModeRepeat:
-    m_config->set(m_config->toIndex(Config::IDX_ModeRepeatIdx), m_modeIndex);
+    m_config->set<Config::IDX_ModeRepeatIdx>(m_modeIndex);
     break;
   case ModeSingle:
-    m_config->set(m_config->toIndex(Config::IDX_ModeSingleIdx), m_modeIndex);
+    m_config->set<Config::IDX_ModeSingleIdx>(m_modeIndex);
     break;
   default:
-    m_config->set(m_config->toIndex(Config::IDX_ModeManualIdx), m_modeIndex);
+    m_config->set<Config::IDX_ModeManualIdx>(m_modeIndex);
     break;
   }
 }

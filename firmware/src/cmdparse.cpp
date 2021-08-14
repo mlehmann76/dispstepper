@@ -13,43 +13,62 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                                   strlen("dispstepper_v0\r\n"));
                     },
                     [this](std::string_view s, int num) {}},
+                    //
+          link_type{"SETup:MODE",
+                    [this](int num) { send(config().get<Config::IDX_Mode>()); },
+                    [this](std::string_view s, int num) {
+                      auto ret = set<Config::IDX_Mode>(s);
+                      cdc().write(ret ? "ack" : "nack");
+                    }},
           link_type{"SETup:SINGle#",
                     [this](int num) {
                       num = num < 0 ? 0 : num > 3 ? 3 : num;
-                      send(config().get<float>(
-                          config().toIndex(Config::IDX_ModeSingle0 + num)));
+                      send(num == 1   ? config().get<Config::IDX_ModeSingle1>()
+                           : num == 2 ? config().get<Config::IDX_ModeSingle2>()
+                           : num == 3
+                               ? config().get<Config::IDX_ModeSingle3>()
+                               : config().get<Config::IDX_ModeSingle0>());
                     },
                     [this](std::string_view s, int num) {
                       num = num < 0 ? 0 : num > 3 ? 3 : num;
-                      auto ret = set<float>(
-                          config().toIndex(Config::IDX_ModeSingle0 + num), s, 0,
-                          1.0);
+                      auto ret = num == 1   ? set<Config::IDX_ModeSingle1>(s)
+                                 : num == 2 ? set<Config::IDX_ModeSingle2>(s)
+                                 : num == 3 ? set<Config::IDX_ModeSingle3>(s)
+                                            : set<Config::IDX_ModeSingle0>(s);
                       cdc().write(ret ? "ack" : "nack");
                     }},
           link_type{"SETup:REPeat#",
                     [this](int num) {
                       num = num < 0 ? 0 : num > 3 ? 3 : num;
-                      send(config().get<float>(
-                          config().toIndex(Config::IDX_ModeRepeat0 + num)));
+                      send(num == 1   ? config().get<Config::IDX_ModeRepeat1>()
+                           : num == 2 ? config().get<Config::IDX_ModeRepeat2>()
+                           : num == 3
+                               ? config().get<Config::IDX_ModeRepeat3>()
+                               : config().get<Config::IDX_ModeRepeat0>());
                     },
                     [this](std::string_view s, int num) {
                       num = num < 0 ? 0 : num > 3 ? 3 : num;
-                      auto ret = set<float>(
-                          config().toIndex(Config::IDX_ModeRepeat0 + num), s, 0,
-                          1.0);
+                      auto ret = num == 1   ? set<Config::IDX_ModeRepeat1>(s)
+                                 : num == 2 ? set<Config::IDX_ModeRepeat2>(s)
+                                 : num == 3 ? set<Config::IDX_ModeRepeat3>(s)
+                                            : set<Config::IDX_ModeRepeat0>(s);
                       cdc().write(ret ? "ack" : "nack");
                     }},
           link_type{"SETup:MANual#",
                     [this](int num) {
                       num = num < 0 ? 0 : num > 3 ? 3 : num;
-                      send(config().get<uint32_t>(
-                          config().toIndex(Config::IDX_ModeManual0 + num)));
+                      send(num == 1   ? config().get<Config::IDX_ModeManual1>()
+                           : num == 2 ? config().get<Config::IDX_ModeManual2>()
+                           : num == 3
+                               ? config().get<Config::IDX_ModeManual3>()
+                               : config().get<Config::IDX_ModeManual0>());
                     },
                     [this](std::string_view s, int num) {
                       num = num < 0 ? 0 : num > 3 ? 3 : num;
-                      auto ret = set<uint32_t>(
-                          config().toIndex(Config::IDX_ModeManual0 + num), s, 0,
-                          4096);
+                      auto ret = num == 1   ? set<Config::IDX_ModeManual1>(s)
+                                 : num == 2 ? set<Config::IDX_ModeManual2>(s)
+                                 : num == 3 ? set<Config::IDX_ModeManual3>(s)
+                                            : set<Config::IDX_ModeManual0>(s);
                       cdc().write(ret ? "ack" : "nack");
                     }},
       } {}

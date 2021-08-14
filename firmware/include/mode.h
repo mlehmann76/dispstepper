@@ -27,11 +27,11 @@ public:
 
 public:
   constexpr mode(Config *_c)
-      : m_button{}, m_led{}, m_mode(_c->get<viewMode>(Config::IDX_Mode)),
+      : m_button{}, m_led{}, m_mode(_c->get<Config::IDX_Mode>()),
         m_config(_c), m_modeSelect{true, 0},
-        m_modeIndex{_c->get<uint32_t>(Config::IDX_ModeSingleIdx),
-                    _c->get<uint32_t>(Config::IDX_ModeRepeatIdx),
-                    _c->get<uint32_t>(Config::IDX_ModeManualIdx)} {}
+        m_modeIndex{_c->get<Config::IDX_ModeSingleIdx>(),
+                    _c->get<Config::IDX_ModeRepeatIdx>(),
+                    _c->get<Config::IDX_ModeManualIdx>()} {}
 
   void run(uint32_t tick) {
     //

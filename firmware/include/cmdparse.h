@@ -32,8 +32,7 @@ public:
   //
   template <typename T> void send(T f);
   //
-  template <typename T>
-  bool set(Config::index_e, const std::string_view &s, T min, T max);
+  template <Config::index_e E> bool set(const std::string_view &s);
 
 private:
   void cleanup();
@@ -46,7 +45,7 @@ private:
   std::array<char, 64> m_buf;
   size_t m_bufIndex;
   bool m_hasLineEnd;
-  std::array<link_type, 4> m_scpi_cmd;
+  std::array<link_type, 5> m_scpi_cmd;
 };
 
 template <> constexpr const char *CmdParse::typetraits<int32_t>::fmt() {
@@ -61,6 +60,10 @@ template <> constexpr const char *CmdParse::typetraits<float>::fmt() {
   return "%.3f";
 }
 
+template <> constexpr const char *CmdParse::typetraits<viewMode>::fmt() {
+  return "%d";
+}
+
 template <typename T> void CmdParse::send(T f) {
   char buf[64];
   memset(buf, 0, sizeof(buf));
@@ -68,16 +71,14 @@ template <typename T> void CmdParse::send(T f) {
   cdc().write(buf, strnlen(buf, sizeof(buf)));
 }
 
-template <typename T>
-bool CmdParse::set(Config::index_e i, const std::string_view &s, T min, T max) {
+template <Config::index_e E> bool CmdParse::set(const std::string_view &s) {
   bool ret = false;
-  auto d = strtod(s);
-  if (d && *d >= min && *d < max) {
-    config().set(i, static_cast<T>(*d));
+  auto d = strtod(s); //TODO use type dependent conversion
+  if (d && *d >= rmin<E>() && *d < rmax<E>()) {
+    config().set<E>(static_cast<typename Config::enumtraits<E>::value_type>(*d));
     ret = true;
   }
   return ret;
 }
-
 
 #endif // _COMMANDPARSE_MAIN
