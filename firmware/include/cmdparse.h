@@ -19,7 +19,7 @@ class CmdParse {
   using link_type = simpleparser::KeywordPatternLink<char, 4>;
 
   template <typename T> struct typetraits {
-    static constexpr const char *fmt() { return ""; }
+    static constexpr const char *fmt();
   };
 
 public:
@@ -45,7 +45,7 @@ private:
   std::array<char, 64> m_buf;
   size_t m_bufIndex;
   bool m_hasLineEnd;
-  std::array<link_type, 5> m_scpi_cmd;
+  std::array<link_type, 8> m_scpi_cmd;
 };
 
 template <> constexpr const char *CmdParse::typetraits<int32_t>::fmt() {
