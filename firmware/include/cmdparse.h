@@ -32,7 +32,7 @@ public:
   //
   template <typename T> void send(T f);
   //
-  template <Config::index_e E> bool set(const std::string_view &s);
+  template <Config::index_e E> constexpr bool set(const std::string_view &s);
 
 private:
   void cleanup();
@@ -71,7 +71,8 @@ template <typename T> void CmdParse::send(T f) {
   cdc().write(buf, strnlen(buf, sizeof(buf)));
 }
 
-template <Config::index_e E> bool CmdParse::set(const std::string_view &s) {
+template <Config::index_e E>
+constexpr bool CmdParse::set(const std::string_view &s) {
   bool ret = false;
   auto d = strtod(s); //TODO use type dependent conversion
   if (d && *d >= rmin<E>() && *d < rmax<E>()) {
