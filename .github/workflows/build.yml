@@ -25,7 +25,7 @@ jobs:
         submodules: recursive
     - uses: fiam/arm-none-eabi-gcc@v1
       with:
-          release: '10.3-2021.07' # The arm-none-eabi-gcc release to use.
+          release: '10-2020-q4' # The arm-none-eabi-gcc release to use.
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
