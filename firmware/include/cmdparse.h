@@ -49,19 +49,19 @@ private:
 };
 
 template <> constexpr const char *CmdParse::typetraits<int32_t>::fmt() {
-  return "%ld";
+  return "%ld\r\n";
 }
 
 template <> constexpr const char *CmdParse::typetraits<uint32_t>::fmt() {
-  return "%lu";
+  return "%lu\r\n";
 }
 
 template <> constexpr const char *CmdParse::typetraits<float>::fmt() {
-  return "%.3f";
+  return "%.3f\r\n";
 }
 
 template <> constexpr const char *CmdParse::typetraits<viewMode>::fmt() {
-  return "%d";
+  return "%d\r\n";
 }
 
 template <typename T> void CmdParse::send(T f) {
@@ -75,7 +75,7 @@ template <Config::index_e E>
 constexpr bool CmdParse::set(const std::string_view &s) {
   bool ret = false;
   auto d = strtod(s); //TODO use type dependent conversion
-  if (d && *d >= rmin<E>() && *d < rmax<E>()) {
+  if (d && *d >= rmin<E>() && *d <= rmax<E>()) {
     config().set<E>(static_cast<typename Config::enumtraits<E>::value_type>(*d));
     ret = true;
   }

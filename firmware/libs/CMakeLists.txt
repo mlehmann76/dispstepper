@@ -61,5 +61,4 @@ PUBLIC
     ${HPL_PATH}/usb/hpl_usb.c
     ${ATMEL_PATH}/persistent_storage/nv_internal_flash_ultra.c
     ${ATMEL_PATH}/persistent_storage/nv_storage.c
-    ${ATMEL_PATH}/examples/driver_examples.c
     )
