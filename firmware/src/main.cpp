@@ -9,7 +9,6 @@
 #include "usb_cdc.h"
 #include "user_board.h"
 #include <atmel_start.h>
-#include <functional>
 #include <stdint.h>
 
 using buttonCheckType = buttonCheck<uint8_t, SW_MODE, SW_DOWN, SW_SEL, SW_UP>;

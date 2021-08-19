@@ -18,7 +18,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                     [this](int num) { send(config().get<Config::IDX_Mode>()); },
                     [this](std::string_view s, int num) {
                       auto ret = set<Config::IDX_Mode>(s);
-                      cdc().write(ret ? "ack" : "nack");
+                      cdc().write(ret ? "ack\r\n" : "nack\r\n");
                     }},
           link_type{"SETup:SINGle:INDex",
                     [this](int num) {
@@ -26,7 +26,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                     },
                     [this](std::string_view s, int num) {
                       auto ret = set<Config::IDX_ModeSingleIdx>(s);
-                      cdc().write(ret ? "ack" : "nack");
+                      cdc().write(ret ? "ack\r\n" : "nack\r\n");
                     }},
           link_type{"SETup:SINGle:VALue#",
                     [this](int num) {
@@ -43,7 +43,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                                  : num == 2 ? set<Config::IDX_ModeSingle2>(s)
                                  : num == 3 ? set<Config::IDX_ModeSingle3>(s)
                                             : set<Config::IDX_ModeSingle0>(s);
-                      cdc().write(ret ? "ack" : "nack");
+                      cdc().write(ret ? "ack\r\n" : "nack\r\n");
                     }},
           link_type{"SETup:REPeat:INDex",
                     [this](int num) {
@@ -51,7 +51,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                     },
                     [this](std::string_view s, int num) {
                       auto ret = set<Config::IDX_ModeRepeatIdx>(s);
-                      cdc().write(ret ? "ack" : "nack");
+                      cdc().write(ret ? "ack\r\n" : "nack\r\n");
                     }},
           link_type{"SETup:REPeat:VALue#",
                     [this](int num) {
@@ -68,7 +68,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                                  : num == 2 ? set<Config::IDX_ModeRepeat2>(s)
                                  : num == 3 ? set<Config::IDX_ModeRepeat3>(s)
                                             : set<Config::IDX_ModeRepeat0>(s);
-                      cdc().write(ret ? "ack" : "nack");
+                      cdc().write(ret ? "ack\r\n" : "nack\r\n");
                     }},
           link_type{"SETup:MANual:INDex",
                     [this](int num) {
@@ -76,7 +76,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                     },
                     [this](std::string_view s, int num) {
                       auto ret = set<Config::IDX_ModeManualIdx>(s);
-                      cdc().write(ret ? "ack" : "nack");
+                      cdc().write(ret ? "ack\r\n" : "nack\r\n");
                     }},
           link_type{"SETup:MANual:VALue#",
                     [this](int num) {
@@ -93,7 +93,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                                  : num == 2 ? set<Config::IDX_ModeManual2>(s)
                                  : num == 3 ? set<Config::IDX_ModeManual3>(s)
                                             : set<Config::IDX_ModeManual0>(s);
-                      cdc().write(ret ? "ack" : "nack");
+                      cdc().write(ret ? "ack\r\n" : "nack\r\n");
                     }},
       } {}
 

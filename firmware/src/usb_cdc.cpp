@@ -56,12 +56,14 @@ static bool cdcReadDone(const uint8_t ep, const enum usb_xfer_code rc,
 
 static int32_t cdcRead(char *const buf, const uint16_t length) {
   cdcTransferRead = true;
+  int _timeout = 10000; // FIXME Magic
   if (cdcdf_acm_read((uint8_t *)buf, length) != USB_OK) {
     cdcTransferRead = false;
     return 0;
   }
-  while (cdcTransferRead && cdcConnected)
-    ;
+  while (cdcTransferRead && cdcConnected && _timeout) {
+    _timeout--;
+  }
   return (int32_t)cdcTransferReadLen;
 }
 

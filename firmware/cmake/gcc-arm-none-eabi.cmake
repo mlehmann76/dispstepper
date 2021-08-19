@@ -1,11 +1,3 @@
-##
-## Author:  Johannes Bruder
-## License: See LICENSE.TXT file included in the project
-##
-##
-## CMake arm-none-eabi toolchain file
-##
-
 # Append current directory to CMAKE_MODULE_PATH for making device specific cmake modules visible
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 
@@ -41,44 +33,43 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 # -fdata-sections       Place each data item into its own section in the output file.
 # -fomit-frame-pointer  Omit the frame pointer in functions that don’t need one.
 # -mabi=aapcs           Defines enums to be a variable sized type.
-set(OBJECT_GEN_FLAGS "-O0 -mthumb -fno-builtin -Wall -ffunction-sections -fdata-sections -fomit-frame-pointer -mabi=aapcs")
-
-set(CMAKE_C_FLAGS   "${OBJECT_GEN_FLAGS} -std=gnu99 " CACHE INTERNAL "C Compiler options")
-set(CMAKE_CXX_FLAGS "${OBJECT_GEN_FLAGS} -std=c++11 -fno-exceptions -fno-rtti" CACHE INTERNAL "C++ Compiler options")
-set(CMAKE_ASM_FLAGS "${OBJECT_GEN_FLAGS} -x assembler-with-cpp " CACHE INTERNAL "ASM Compiler options")
-
+set(OBJECT_GEN_FLAGS "-mthumb -fsingle-precision-constant")
+set(CMAKE_ASM_FLAGS "${OBJECT_GEN_FLAGS} -x assembler-with-cpp " CACHE STRING "" FORCE)
 
 # -Wl,--gc-sections     Perform the dead code elimination.
 # --specs=nano.specs    Link with newlib-nano.
 # --specs=nosys.specs   No syscalls, provide empty implementations for the POSIX system calls.
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections --specs=nano.specs --specs=nosys.specs -mthumb -mabi=aapcs -Wl,-Map=${CMAKE_PROJECT_NAME}.map" CACHE INTERNAL "Linker options")
+# -u _printf_float      use float suport
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -u _printf_float --specs=nano.specs --specs=nosys.specs -mthumb -mabi=aapcs -Wl,-Map=${CMAKE_PROJECT_NAME}.map" CACHE STRING "" FORCE)
 
 #---------------------------------------------------------------------------------------
 # Set debug/release build configuration Options
 #---------------------------------------------------------------------------------------
+# Default C compiler flags
+set(CMAKE_C_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -Og -Wall -DDEBUG -std=gnu99")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_RELEASE_INIT "${OBJECT_GEN_FLAGS} -O3 -Wall -std=gnu99")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_MINSIZEREL_INIT "${OBJECT_GEN_FLAGS} -Os -Wall -std=gnu99")
+set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_RELWITHDEBINFO_INIT  "${OBJECT_GEN_FLAGS} -O2 -g -Wall -std=gnu99")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING "" FORCE)
 
-# Options for DEBUG build
-# -Og   Enables optimizations that do not interfere with debugging.
-# -g    Produce debugging information in the operating system’s native format.
-set(CMAKE_C_FLAGS_DEBUG "-Og -g" CACHE INTERNAL "C Compiler options for debug build type")
-set(CMAKE_CXX_FLAGS_DEBUG "-Og -g" CACHE INTERNAL "C++ Compiler options for debug build type")
-set(CMAKE_ASM_FLAGS_DEBUG "-g" CACHE INTERNAL "ASM Compiler options for debug build type")
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "" CACHE INTERNAL "Linker options for debug build type")
-
-# Options for RELEASE build
-# -Os   Optimize for size. -Os enables all -O2 optimizations.
-set(CMAKE_C_FLAGS_RELEASE "-Os" CACHE INTERNAL "C Compiler options for release build type")
-set(CMAKE_CXX_FLAGS_RELEASE "-Os" CACHE INTERNAL "C++ Compiler options for release build type")
-set(CMAKE_ASM_FLAGS_RELEASE "" CACHE INTERNAL "ASM Compiler options for release build type")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "" CACHE INTERNAL "Linker options for release build type")
-
-
+# Default C++ compiler flags
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -Og -Wall -DDEBUG -fno-exceptions -fno-rtti -std=gnu++17")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE_INIT "${OBJECT_GEN_FLAGS} -O3 -Wall -fno-exceptions -fno-rtti -std=gnu++17")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "${OBJECT_GEN_FLAGS} -Os -Wall -fno-exceptions -fno-rtti -std=gnu++17")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "${OBJECT_GEN_FLAGS} -O2 -g -Wall -fno-exceptions -fno-rtti -std=gnu++17")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING "" FORCE)
 #---------------------------------------------------------------------------------------
 # Set compilers
 #---------------------------------------------------------------------------------------
-set(CMAKE_C_COMPILER ${TOOLCHAIN}-gcc${TOOLCHAIN_EXT} CACHE INTERNAL "C Compiler")
-set(CMAKE_CXX_COMPILER ${TOOLCHAIN}-g++${TOOLCHAIN_EXT} CACHE INTERNAL "C++ Compiler")
-set(CMAKE_ASM_COMPILER ${TOOLCHAIN}-gcc${TOOLCHAIN_EXT} CACHE INTERNAL "ASM Compiler")
+set(CMAKE_C_COMPILER ${TOOLCHAIN}-gcc${TOOLCHAIN_EXT})
+set(CMAKE_CXX_COMPILER ${TOOLCHAIN}-g++${TOOLCHAIN_EXT})
+set(CMAKE_ASM_COMPILER ${TOOLCHAIN}-gcc${TOOLCHAIN_EXT})
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
