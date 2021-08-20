@@ -20,12 +20,10 @@ set (My_Project_Copyright "Copyright © ${My_Project_Copyright_Date} ${My_Projec
 string(TOUPPER ${My_Project_Title} My_Project_Title_Caps  )
 string(REGEX REPLACE " " "_" My_Project_Title_Caps ${My_Project_Title_Caps} )
 
-set(CMAKE_CXX_STANDARD 17)
-set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/libs/atmel/samd21d/gcc/gcc/samd21e17d_flash.ld")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${LINKER_SCRIPT}")
-set_target_properties(${TARGET_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
-
 project(${My_Project_Title})
+
+set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/libs/atmel/samd21d/gcc/gcc/samd21e17d_flash.ld")
+set_target_properties(${TARGET_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)

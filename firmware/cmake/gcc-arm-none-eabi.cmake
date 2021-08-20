@@ -34,36 +34,40 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 # -fomit-frame-pointer  Omit the frame pointer in functions that don’t need one.
 # -mabi=aapcs           Defines enums to be a variable sized type.
 set(OBJECT_GEN_FLAGS "-mthumb -fsingle-precision-constant")
-set(CMAKE_ASM_FLAGS "${OBJECT_GEN_FLAGS} -x assembler-with-cpp " CACHE STRING "" FORCE)
+set(CMAKE_ASM_FLAGS "${OBJECT_GEN_FLAGS} -x assembler-with-cpp " CACHE INTERNAL "" FORCE)
 
 # -Wl,--gc-sections     Perform the dead code elimination.
 # --specs=nano.specs    Link with newlib-nano.
 # --specs=nosys.specs   No syscalls, provide empty implementations for the POSIX system calls.
 # -u _printf_float      use float suport
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -u _printf_float --specs=nano.specs --specs=nosys.specs -mthumb -mabi=aapcs -Wl,-Map=${CMAKE_PROJECT_NAME}.map" CACHE STRING "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS_INIT "-Wl,--gc-sections -u _printf_float --specs=nano.specs --specs=nosys.specs -mthumb -mabi=aapcs -Wl,-Map=${CMAKE_PROJECT_NAME}.map")
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-u _printf_float" CACHE INTERNAL "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-u _printf_float" CACHE INTERNAL "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "-u _printf_float" CACHE INTERNAL "" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "-u _printf_float" CACHE INTERNAL "" FORCE)
 
 #---------------------------------------------------------------------------------------
 # Set debug/release build configuration Options
 #---------------------------------------------------------------------------------------
 # Default C compiler flags
 set(CMAKE_C_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -Og -Wall -DDEBUG -std=gnu99")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_C_FLAGS_RELEASE_INIT "${OBJECT_GEN_FLAGS} -O3 -Wall -std=gnu99")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_C_FLAGS_MINSIZEREL_INIT "${OBJECT_GEN_FLAGS} -Os -Wall -std=gnu99")
-set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_MINSIZEREL "${CMAKE_C_FLAGS_MINSIZEREL_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_C_FLAGS_RELWITHDEBINFO_INIT  "${OBJECT_GEN_FLAGS} -O2 -g -Wall -std=gnu99")
-set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO_INIT}" CACHE INTERNAL "" FORCE)
 
 # Default C++ compiler flags
 set(CMAKE_CXX_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -Og -Wall -DDEBUG -fno-exceptions -fno-rtti -std=gnu++17")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "${OBJECT_GEN_FLAGS} -O3 -Wall -fno-exceptions -fno-rtti -std=gnu++17")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "${OBJECT_GEN_FLAGS} -Os -Wall -fno-exceptions -fno-rtti -std=gnu++17")
-set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "${OBJECT_GEN_FLAGS} -O2 -g -Wall -fno-exceptions -fno-rtti -std=gnu++17")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT}" CACHE INTERNAL "" FORCE)
 #---------------------------------------------------------------------------------------
 # Set compilers
 #---------------------------------------------------------------------------------------
