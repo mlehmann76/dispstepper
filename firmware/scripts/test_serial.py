@@ -2,7 +2,7 @@ import serial
 
 cmds = [
     {"name": "*IDN",
-     "range": b"dispstepper-0.0.0"},
+     "range": b"dispstepper-0.1.0"},
     {"name": "SETup:MODE",
      "range": [0, 2],
      "type": "i"},
