@@ -20,6 +20,7 @@ target_sources(${PROJECT_NAME}
 target_include_directories (${PROJECT_NAME}
 PUBLIC
     ./
+    ${CMAKE_BINARY_DIR}/
     ${ATMEL_PATH}/
     ${ATMEL_PATH}/config
     ${ATMEL_PATH}/samd21d/include
@@ -37,3 +38,26 @@ PUBLIC
     ${ATMEL_PATH}/examples
     ${CMAKE_SOURCE_DIR}/libs/simpleparser/include
 )
+
+
+find_package(Git)
+if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/../.git")
+    INCLUDE(GetGitRevisionDescription)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} describe --tags HEAD OUTPUT_VARIABLE SHORT_SHA OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+    SET(REVISION ${SHORT_SHA} CACHE STRING "git describe tags" FORCE)
+
+    # only use the plugin to tie the configure state to the tag to force rebuilds
+    # of files that depend on version.h
+    include(GetGitRevisionDescription)
+    #get_git_head_revision(REFSPEC COMMITHASH)
+else()
+    message(WARNING "Git not found, cannot set version info")
+
+    SET(REVISION "unknown")
+endif()
+
+# generate version.h
+include_directories(${CMAKE_BINARY_DIR})
+configure_file("${CMAKE_SOURCE_DIR}/include/version.h.in" "${CMAKE_BINARY_DIR}/version.h" @ONLY)
+    

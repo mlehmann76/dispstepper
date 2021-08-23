@@ -36,6 +36,8 @@ public:
 
 private:
   void cleanup();
+  void ack() { cdc().write("ack\r\n"); }
+  void nack() { cdc().write("nack\r\n"); }
 
   static std::optional<long> strtol(const std::string_view &s, int base = 10);
   static std::optional<double> strtod(const std::string_view &s);
@@ -74,9 +76,10 @@ template <typename T> void CmdParse::send(T f) {
 template <Config::index_e E>
 constexpr bool CmdParse::set(const std::string_view &s) {
   bool ret = false;
-  auto d = strtod(s); //TODO use type dependent conversion
+  auto d = strtod(s); // TODO use type dependent conversion
   if (d && *d >= rmin<E>() && *d <= rmax<E>()) {
-    config().set<E>(static_cast<typename Config::enumtraits<E>::value_type>(*d));
+    config().set<E>(
+        static_cast<typename Config::enumtraits<E>::value_type>(*d));
     ret = true;
   }
   return ret;
