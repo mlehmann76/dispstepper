@@ -45,7 +45,12 @@ if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/../.git")
     INCLUDE(GetGitRevisionDescription)
     EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} describe --tags HEAD OUTPUT_VARIABLE SHORT_SHA OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-    SET(REVISION ${SHORT_SHA} CACHE STRING "git describe tags" FORCE)
+    SET(VERSION ${SHORT_SHA} CACHE STRING "git describe tags" FORCE)
+    string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
+    string(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
+    string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
+    string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${VERSION}")
+    set(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
     # only use the plugin to tie the configure state to the tag to force rebuilds
     # of files that depend on version.h
@@ -54,7 +59,7 @@ if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/../.git")
 else()
     message(WARNING "Git not found, cannot set version info")
 
-    SET(REVISION "unknown")
+    SET(VERSION "unknown")
 endif()
 
 # generate version.h

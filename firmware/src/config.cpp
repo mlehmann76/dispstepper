@@ -10,7 +10,7 @@ Config::Config() : m_writeRequest(false), m_requestTick(0) {
                                sizeof(m_coll));
     assert(ret == ERR_NONE);
   } else {
-      //TODO initialize storage with defaults
+      //storage has already defaults
   }
 }
 void Config::run(uint32_t tick) {
@@ -22,8 +22,8 @@ void Config::run(uint32_t tick) {
   if (m_requestTick != 0 && (uint32_t)(tick-m_requestTick) > 1000) {
     m_requestTick = 0;
     //update storage
-    //auto ret = nv_storage_write(ID, 0x0, reinterpret_cast<uint8_t *>(&m_coll),
-    //                           sizeof(m_coll));
-    //assert(ret == ERR_NONE);
+    auto ret = nv_storage_write(ID, 0x0, reinterpret_cast<uint8_t *>(&m_coll),
+                               sizeof(m_coll));
+    assert(ret == ERR_NONE);
   }
 }

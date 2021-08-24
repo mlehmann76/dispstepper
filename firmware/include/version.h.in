@@ -20,7 +20,10 @@
 
 #define @My_Project_Title_Caps@_NAME "@My_Project_Title@"
 
-#define @My_Project_Title_Caps@_VERSION "@My_Project_Version@"
+#define @My_Project_Title_Caps@_VERSION "@VERSION_SHORT@"
+#define @My_Project_Title_Caps@_VERSION_MAJOR "@VERSION_MAJOR@"
+#define @My_Project_Title_Caps@_VERSION_MINOR "@VERSION_MINOR@"
+#define @My_Project_Title_Caps@_VERSION_PATCH "@VERSION_PATCH@"
 #define @My_Project_Title_Caps@_COPYRIGHT "@My_Project_Copyright@"
 
 #define @My_Project_Title_Caps@_LICENSE "\t@My_Project_License_Literal@"
