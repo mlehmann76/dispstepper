@@ -1,4 +1,5 @@
 #include "board.h"
+#include "button.h"
 #include "cmdparse.h"
 #include "config.h"
 #include "control.h"
@@ -6,9 +7,7 @@
 #include "mode.h"
 #include "simpleparser.h"
 #include "stepper.h"
-#include "usb_cdc.h"
-#include "user_board.h"
-#include <atmel_start.h>
+#include "usb_cdc_wrap.h"
 #include <stdint.h>
 
 using buttonCheckType = buttonCheck<uint8_t, SW_MODE, SW_DOWN, SW_SEL, SW_UP>;
@@ -19,8 +18,7 @@ using namespace std::placeholders;
 
 int main(void) {
   /* Initializes MCU, drivers and middleware */
-  atmel_start_init();
-  SysTick_Init(48e6);
+  board_init();
 
   Config config;
   usb_cdc_wrapper cdc;
@@ -32,14 +30,14 @@ int main(void) {
   mode.registerButtonCb(
       std::bind(&control::onButtonChange<uint8_t>, &ctrl, _1, _2));
   cdc.set(std::bind(&CmdParse::push, &parser, _1));
-  gpio_set_pin_level(nSLEEP, 1);
+  wrap_gpio_set_pin_level(nSLEEP, 1);
 
   while (1) {
     //
     config.run(getTick());
     mode.run(getTick());
     ctrl.run();
-    step.func(hri_tccount16_read_COUNT_reg(TC3));
+    step.func(readCounter());
     //
     cdc.read();
     //

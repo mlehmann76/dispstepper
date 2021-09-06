@@ -9,10 +9,10 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         main.cpp
         stepper.cpp
-        board.cpp
+        board.c
         control.cpp
         config.cpp
-        usb_cdc.cpp
+        usb_cdc.c
         cmdparse.cpp
     PUBLIC
 )

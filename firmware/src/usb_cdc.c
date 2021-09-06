@@ -5,7 +5,6 @@
  * Please copy examples or other code you want to keep to a separate file or
  * main.c to avoid loosing it when reconfiguring.
  */
-#include "usb_cdc.h"
 #include "atmel_start.h"
 #include "cdcdf_acm.h"
 #include "cdcdf_acm_desc.h"
@@ -70,7 +69,7 @@ static int32_t cdcRead(char *const buf, const uint16_t length) {
 static uint8_t outBuf[80];
 static uint32_t outLen = 0;
 
-static int32_t cdcWrite(const char *const buf, const uint16_t length) {
+int32_t cdcWrite(const char *const buf, const uint16_t length) {
   const char *end = buf + length;
   for (const char *p = buf; p < end && cdcConnected; ++p) {
     outBuf[outLen++] = *p;
@@ -117,7 +116,7 @@ void cdc_device_acm_init(void) {
   usbdc_attach();
 }
 
-static void usb_cdc_service(char *ret, const size_t maxLen, size_t *len) {
+void usb_cdc_service(char *ret, const size_t maxLen, size_t *len) {
   *len = 0;
   if (cdcInitialized) {
     if (len && ret) {
@@ -140,22 +139,3 @@ static void usb_cdc_service(char *ret, const size_t maxLen, size_t *len) {
 
 void usb_init(void) { cdc_device_acm_init(); }
 
-/*
- */
-
-void usb_cdc_wrapper::read() {
-  usb_cdc_service(m_buf, sizeof(m_buf), &m_readlen);
-  if (m_readlen && m_readcb) {
-    for (size_t i = 0; i < m_readlen; i++) {
-      m_readcb(m_buf[i]);
-    }
-  }
-}
-
-void usb_cdc_wrapper::write(const char *buf, const size_t len) {
-  cdcWrite(buf, len);
-}
-
-void usb_cdc_wrapper::write(const std::string_view &s) {
-  cdcWrite(s.data(), s.size());
-}

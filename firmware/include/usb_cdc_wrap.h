@@ -9,6 +9,8 @@
  */
 extern "C" {
 void usb_init(void);
+void usb_cdc_service(char *ret, const size_t maxLen, size_t *len);
+int32_t cdcWrite(const char *const buf, const uint16_t length);
 }
 
 class usb_cdc_wrapper {
@@ -23,9 +25,16 @@ public:
   void operator=(const usb_cdc_wrapper &) = delete;
   void operator=(usb_cdc_wrapper&&) = delete;
   //
-  void read();
-  void write(const std::string_view& s);
-  void write(const char *buf, const size_t len);
+  void read() {
+    usb_cdc_service(m_buf, sizeof(m_buf), &m_readlen);
+    if (m_readlen && m_readcb) {
+      for (size_t i = 0; i < m_readlen; i++) {
+        m_readcb(m_buf[i]);
+      }
+    }
+  }
+  void write(const std::string_view &s) { cdcWrite(s.data(), s.size()); }
+  void write(const char *buf, const size_t len) { cdcWrite(buf, len); }
   void set(readcd_type &&rcb) { m_readcb = rcb; }
 
 private:

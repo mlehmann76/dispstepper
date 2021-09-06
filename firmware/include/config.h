@@ -1,7 +1,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-#include <cstdint>
+#include <stdint.h>
 
 static constexpr int MODES = 3;
 static constexpr int MAXLEVEL = 3;

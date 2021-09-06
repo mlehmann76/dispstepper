@@ -1,5 +1,5 @@
 #include "stepper.h"
-#include "atmel_start_pins.h"
+#include "board.h"
 #include <stdint.h>
 
 typedef struct {
@@ -23,12 +23,12 @@ static const gpioState_t state[STEPS][4] = {
 
 static void setStep(int num) {
   if (0 <= num && num < STEPS) {
-    for (size_t i = 0; i < 4; i++) {
-      gpio_set_pin_level(state[num][i].gpio, state[num][i].state);
+    for (uint_fast8_t i = 0; i < 4; i++) {
+      wrap_gpio_set_pin_level(state[num][i].gpio, state[num][i].state);
     }
   } else {
-    for (size_t i = 0; i < 4; i++) {
-      gpio_set_pin_level(state[0][i].gpio, 0);
+    for (uint_fast8_t i = 0; i < 4; i++) {
+      wrap_gpio_set_pin_level(state[0][i].gpio, 0);
     }
   }
 }

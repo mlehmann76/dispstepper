@@ -2,7 +2,7 @@
 #define __LED_H_
 
 #include <functional> //std::function
-#include <hal_gpio.h>
+#include "board.h"
 
 struct single {};
 struct multi {};
@@ -14,16 +14,16 @@ template <typename TGpio, TGpio... gpios> class ledview {
 public:
   constexpr ledview() : m_gpio{gpios...} {
     for (auto l : m_gpio) {
-      gpio_set_pin_level(l, 0);
+      wrap_gpio_set_pin_level(l, 0);
     }
   }
 
   constexpr void set(TGpio val, std::function<bool(TGpio, size_t)> func) {
     for (size_t i = 0; i < size(); i++) {
       if (func(val, i)) {
-        gpio_set_pin_level(m_gpio[i] , 0);
+        wrap_gpio_set_pin_level(m_gpio[i], 0);
       } else {
-        gpio_set_pin_level(m_gpio[i] , 1);
+        wrap_gpio_set_pin_level(m_gpio[i], 1);
       }
     }
   }

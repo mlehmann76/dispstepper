@@ -3,7 +3,7 @@
 
 #include "config.h"
 #include "simpleparser.h"
-#include "usb_cdc.h"
+#include "usb_cdc_wrap.h"
 #include <algorithm>
 #include <array>
 #include <cstdio>

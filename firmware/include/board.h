@@ -1,82 +1,49 @@
-#ifndef __BOARD_H_
-#define __BOARD_H_
+#ifndef _BOARD_MAIN_H_
+#define _BOARD_MAIN_H_
 
-#include <hal_gpio.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+
+#define GPIO(port, pin) ((((port)&0x7u) << 5) + ((pin)&0x1Fu))
+#define GPIO_PORTA 0
+
+#define LED2 GPIO(GPIO_PORTA, 2)
+#define LED3 GPIO(GPIO_PORTA, 3)
+#define LED4 GPIO(GPIO_PORTA, 4)
+#define LED5 GPIO(GPIO_PORTA, 5)
+#define SW_MODE GPIO(GPIO_PORTA, 9)
+#define PA10 GPIO(GPIO_PORTA, 10)
+#define PA11 GPIO(GPIO_PORTA, 11)
+#define SW_DOWN GPIO(GPIO_PORTA, 14)
+#define SW_SEL GPIO(GPIO_PORTA, 15)
+#define SW_UP GPIO(GPIO_PORTA, 16)
+#define nSLEEP GPIO(GPIO_PORTA, 17)
+#define AIN1 GPIO(GPIO_PORTA, 18)
+#define AIN2 GPIO(GPIO_PORTA, 19)
+#define BIN2 GPIO(GPIO_PORTA, 22)
+#define BIN1 GPIO(GPIO_PORTA, 23)
+#define PA24 GPIO(GPIO_PORTA, 24)
+#define PA25 GPIO(GPIO_PORTA, 25)
+#define nFAULT GPIO(GPIO_PORTA, 27)
 
 void SysTick_Init(uint32_t cpuFreq);
 uint32_t getTick();
+void board_init();
+void wrap_nv_storage_init();
+int32_t wrap_nv_storage_read(const uint16_t id, const uint16_t offset,
+                             uint8_t *const data, const uint16_t size);
+uint16_t wrap_nv_storage_item_size(const uint16_t id);
+int32_t wrap_nv_storage_write(const uint16_t id, const uint16_t offset,
+                              const uint8_t *const data, const uint16_t size);
+void wrap_gpio_set_pin_level(const uint8_t pin, const bool level);
+bool wrap_gpio_get_pin_level(const uint8_t pin) ;
+uint16_t readCounter();
 
-template <typename TGpio, TGpio... Gpio> class buttonCheck {
-public:
-  enum bstate { bpressed, breleased };
+#ifdef __cplusplus
+}
+#endif
 
-  constexpr buttonCheck() : m_gpio{Gpio...}, m_lasttick() {}
-
-  void run(uint32_t tick) {
-    if (m_lasttick != tick) {
-      for (auto& key : m_gpio) {
-        bstate _gstate = gpio_get_pin_level(key._gpio) ? breleased : bpressed;
-        if (_gstate != key._state) {
-          key._count++;
-          if (key._count == 50) {
-            key._state = _gstate;
-            key._stateChanged = true; 
-          } 
-        } else {
-          key._count = 0;
-        }
-      }
-      m_lasttick = tick;
-    }
-  }
-
-  template <TGpio gpio> constexpr bstate state() const { return state(gpio); }
-
-  constexpr bstate state(TGpio gpio) const {
-    for (auto& key : m_gpio) {
-      if (key._gpio == gpio) {
-        return key._state;
-      }
-    }
-    static_assert(true, "button unknown");
-    return breleased;
-  }
-
-  template <TGpio gpio> constexpr bool pressed() const { return pressed(gpio); }
-
-  constexpr bool pressed(TGpio gpio) const {
-    for (auto& key : m_gpio) {
-      if (key._gpio == gpio) {
-        return key._state == bpressed && key._count >= 50;
-      }
-    }
-    return false;
-  }
-
-  constexpr bool stateChanged(TGpio gpio) {
-    bool ret = false;
-    for (auto& key : m_gpio) {
-      if (key._gpio == gpio) {
-        ret = key._stateChanged;
-        key._stateChanged = false;
-        key._count = ret ? key._count+1 : key._count;
-        break;
-      }
-    }
-    return ret;
-  }
-
-private:
-  struct check_t {
-    check_t(TGpio _g) : _gpio(_g), _state(breleased), _count(0) {}
-    TGpio _gpio;
-    bstate _state;
-    uint32_t _count;
-    bool _stateChanged;
-  };
-
-  check_t m_gpio[sizeof...(Gpio)];
-  uint32_t m_lasttick;
-};
-
-#endif // !__BOARD_H_
+#endif // !_BOARD_MAIN_H_
