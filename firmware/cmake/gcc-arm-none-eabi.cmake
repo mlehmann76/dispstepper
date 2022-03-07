@@ -50,7 +50,7 @@ set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "-u _printf_float" CACHE INTERNAL "" F
 # Set debug/release build configuration Options
 #---------------------------------------------------------------------------------------
 # Default C compiler flags
-set(CMAKE_C_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -Og -Wall -DDEBUG -std=gnu99")
+set(CMAKE_C_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -O0 -Wall -DDEBUG -std=gnu99")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_C_FLAGS_RELEASE_INIT "${OBJECT_GEN_FLAGS} -O3 -Wall -std=gnu99")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE_INIT}" CACHE INTERNAL "" FORCE)
@@ -60,7 +60,7 @@ set(CMAKE_C_FLAGS_RELWITHDEBINFO_INIT  "${OBJECT_GEN_FLAGS} -O2 -g -Wall -std=gn
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO_INIT}" CACHE INTERNAL "" FORCE)
 
 # Default C++ compiler flags
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -Og -Wall -DDEBUG -fno-exceptions -fno-rtti -std=gnu++17")
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "${OBJECT_GEN_FLAGS} -g3 -O0 -Wall -DDEBUG -fno-exceptions -fno-rtti -std=gnu++17")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG_INIT}" CACHE INTERNAL "" FORCE)
 set(CMAKE_CXX_FLAGS_RELEASE_INIT "${OBJECT_GEN_FLAGS} -O3 -Wall -fno-exceptions -fno-rtti -std=gnu++17")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE_INIT}" CACHE INTERNAL "" FORCE)

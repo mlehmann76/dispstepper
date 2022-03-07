@@ -49,8 +49,10 @@ private:
   //
   void checkConfig(uint32_t tick);
   //
-  void updateLed() {
-    if (m_modeSelect.isEnabled) {
+  void updateConfig();
+  //
+  void updateLed(bool forceBar = false) {
+    if (m_modeSelect.isEnabled && forceBar == false) {
       m_led.set(m_mode, single{});
     } else {
       m_led.set(m_modeIndex[m_mode], bar{});
@@ -74,14 +76,13 @@ void mode<TGpio, buttonCheckType, ledViewType>::run(uint32_t tick) {
   //
   m_button.run(tick);
   //
-  checkConfig(tick);
-  //
   if (m_modeSelect.isEnabled) {
     onModeButton(tick);
     onUpDownButton(tick);
     if (m_modeSelect.isTimeOut(tick)) {
       m_modeSelect.isEnabled = false;
       updateLed();
+      updateConfig();
       if (m_modeChangeCb) {
         m_modeChangeCb(m_mode, modeValue());
       }
@@ -91,6 +92,8 @@ void mode<TGpio, buttonCheckType, ledViewType>::run(uint32_t tick) {
     updateLed();
   } else {
     checkbuttons();
+    //
+    checkConfig(tick);
   }
 }
 /*
@@ -136,13 +139,13 @@ void mode<TGpio, buttonCheckType, ledViewType>::onUpDownButton(uint32_t tick) {
   if (m_button.stateChanged(SW_UP) && m_button.pressed(SW_UP) &&
       m_modeIndex[m_mode] < MAXLEVEL) {
     m_modeIndex[m_mode]++;
-    updateLed();
+    updateLed(true);
     m_modeSelect.select(tick + TIMEOUT);
   }
   if (m_button.stateChanged(SW_DOWN) && m_button.pressed(SW_DOWN) &&
       m_modeIndex[m_mode] > 0) {
     m_modeIndex[m_mode]--;
-    updateLed();
+    updateLed(true);
     m_modeSelect.select(tick + TIMEOUT);
   }
 }
@@ -172,5 +175,23 @@ void mode<TGpio, buttonCheckType, ledViewType>::checkConfig(uint32_t tick) {
   if (update) {
     updateLed();
   }
+}
+/*
+ *
+ */
+template <typename TGpio, typename buttonCheckType, typename ledViewType>
+void mode<TGpio, buttonCheckType, ledViewType>::updateConfig() {
+  switch (m_mode) {
+  case ModeRepeat:
+    m_config->set<Config::IDX_ModeRepeatIdx>(m_modeIndex[m_mode]);
+    break;
+  case ModeSingle:
+    m_config->set<Config::IDX_ModeSingleIdx>(m_modeIndex[m_mode]);
+    break;
+  default:
+    m_config->set<Config::IDX_ModeManualIdx>(m_modeIndex[m_mode]);
+    break;
+  }
+  m_config->set<Config::IDX_Mode>(m_mode);
 }
 #endif // __MODE_H_

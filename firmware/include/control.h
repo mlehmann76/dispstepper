@@ -21,7 +21,6 @@ private:
   void onModeSingleRepeat();
   void onModeManual();
   float modeValue() const;
-  void update();
 
   Config *m_config;
   stepCtrl *m_stepper;

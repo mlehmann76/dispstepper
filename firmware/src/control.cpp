@@ -62,24 +62,9 @@ float control::modeValue() const {
   return 0;
 }
 //
-void control::update() {
-  switch (m_mode) {
-  case ModeRepeat:
-    m_config->set<Config::IDX_ModeRepeatIdx>(m_modeIndex);
-    break;
-  case ModeSingle:
-    m_config->set<Config::IDX_ModeSingleIdx>(m_modeIndex);
-    break;
-  default:
-    m_config->set<Config::IDX_ModeManualIdx>(m_modeIndex);
-    break;
-  }
-}
-//
 void control::onModeChange(viewMode m, uint32_t v) {
   m_mode = m;
   m_modeIndex = v;
-  update();
   sstate = SIDLE;
   m_stepper->cw(0.0, 0);
 }

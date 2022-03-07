@@ -34,7 +34,7 @@
             },
             "MIMode": "gdb",
             "miDebuggerPath": "@GDB_BIN@",
-            "debugServerPath": "/home/marco/JLink_Linux_V700a_x86_64/JLinkGDBServer"
+            "debugServerPath": "/home/${env:USER}/JLink_Linux_V760h_x86_64/JLinkGDBServer"
         }
         {
             "name": "Cortex Debug",
@@ -42,7 +42,7 @@
             "executable": "${workspaceRoot}/build/@PROJECT_NAME@",
             "request": "launch",
             "type": "cortex-debug",
-            "serverpath": "/home/marco/JLink_Linux_V700a_x86_64/JLinkGDBServerCLExe",
+            "serverpath": "/home/${env:USER}/JLink_Linux_V760h_x86_64/JLinkGDBServerCLExe",
             "servertype": "jlink",
             "device": "atsamd21e17",
             "interface": "swd",
