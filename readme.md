@@ -1,41 +1,32 @@
 # Dispense steppermotor controller
 control a steppermotor to dispense fluids from syringes
 
-3 modes
+4 modes
 
 * Single Mode (dispensing on button, stop + retract after steps, selectable number of steps)
 * Repeat Mode (continue dispense on pressed button, retract after button release, selectable number of steps)
 * Manual Mode (control direction of stepper motor, selectable speed)
+* External Mode (contro over usb serial device)
 
 ## Configuration
 ### By Button
 push mode button, selected mode led will lit and settings can be changed by up/down button and led will switch to bar mode showning actual setting (0..3)
 ### By serial commands
 all commands can change to read mode by adding a ?
-* *IDN 
-> read device version
-* SETup:FACtory:DEFault
-> set config to factory defaults
-* SETup:MODE
-> get / set Mode (0 .. 2)
-* SETup:SINGle:INDex
-> get / set single mode index (0..3)
-* SETup:SINGle:VALue#
-> get / set single mode value (# is 0..3) from 0 to 4096 steps
-* SETup:REPeat:INDex
-> get / set repeat mode index (0..3)
-* SETup:REPeat:VALue#
-> get / set repeat mode value (# is 0..3) from 0 to 4096 steps
-* SETup:MANual:INDex
-> get / set manual mode index (0..3)
-* SETup:MANual:VALue#
-> get / set manual mode value (# is 0..3) from 0 to 1.0 speed
-* SETup:EXTernal:SPeed
-> get / set speed value (0..1.0) for control over serial
-* SETup:EXTernal:STeps
-> get / set steps value (0..4096) for control over serial
-* SETup:EXTernal:DIR
-> get / set direction (-1, 0, 1) for control over serial, this will start move if direction not 0. set to 0 after steps
+| Command | Range | Description |
+| :-- | :-- | :-- |
+| *IDN | | read device version |
+| SETup:FACtory:DEFault| 1 |set config to factory defaults |
+| SETup:MODE | (0 .. 3) | get / set Mode / Single=0/Repeat=1/Manual=2/External=3 |
+| SETup:SINGle:INDex |(0..3) | get / set single mode index |
+| SETup:SINGle:VALue# |(0..4096)| get / set single mode value (# is 0..3)  steps |
+| SETup:REPeat:INDex |(0..3)| get / set repeat mode index  |
+| SETup:REPeat:VALue# |(0..4096)|get / set repeat mode value (# is 0..3) steps |
+| SETup:MANual:INDex |(0..3)| get / set manual mode index  |
+| SETup:MANual:VALue# |(0..1.0)| get / set manual mode value (# is 0..3) speed |
+| SETup:EXTernal:SPeed |(0..1.0)| get / set speed value  for control over serial |
+| SETup:EXTernal:STeps |(0..4096)| get / set steps value for control over serial |
+| SETup:EXTernal:DIR |(-1, 0, 1)| get / set direction  for control over serial, this will start move if direction not 0. set to 0 after steps |
 # Programming
 ## BootLoader
 change into uf2-samdx1
