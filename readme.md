@@ -1,11 +1,12 @@
 # Dispense steppermotor controller
 control a steppermotor to dispense fluids from syringes
 
-3 modes
+4 modes
 
 * Single Mode (dispensing on button, stop + retract after steps, selectable number of steps)
 * Repeat Mode (continue dispense on pressed button, retract after button release, selectable number of steps)
 * Manual Mode (control direction of stepper motor, selectable speed)
+* External Mode (contro over usb serial device)
 
 ## Configuration
 ### By Button
