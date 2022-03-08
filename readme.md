@@ -1,6 +1,9 @@
 # Dispense steppermotor controller
 control a steppermotor to dispense fluids from syringes
 
+![3d view](/pics/3d_view.png)
+
+
 4 modes
 
 * Single Mode (dispensing on button, stop + retract after steps, selectable number of steps)
