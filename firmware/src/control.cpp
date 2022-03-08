@@ -3,26 +3,27 @@
 #include "stepper.h"
 
 control::control(Config *_c, stepCtrl *_s)
-    : m_config(_c), m_stepper(_s), sstate(SIDLE),
-      m_mode(_c->get<Config::IDX_Mode>()), m_lastButton(-1),
-      m_lastButtonState(false), m_modeIndex(0) {}
+    : m_config(_c), m_stepper(_s), sstate(SIDLE), m_lastButton(-1),
+      m_lastButtonState(false), m_lastDir(DIR_NONE) {}
 //
 void control::run() {
-  switch (m_mode) {
+  switch (mode()) {
   case ModeRepeat:
   case ModeSingle:
     onModeSingleRepeat();
     break;
-  default:
+  case ModeManual:
     onModeManual();
     break;
+  case ModeExtern:
+    onModeExtern();
   }
 }
 //
 float control::modeValue() const {
-  switch (m_mode) {
+  switch (mode()) {
   case ModeRepeat:
-    switch (m_modeIndex) {
+    switch (m_config->get<Config::IDX_ModeRepeatIdx>()) {
     case 0:
       return m_config->get<Config::IDX_ModeRepeat0>();
     case 1:
@@ -35,7 +36,7 @@ float control::modeValue() const {
     //
     break;
   case ModeSingle:
-    switch (m_modeIndex) {
+    switch (m_config->get<Config::IDX_ModeSingleIdx>()) {
     case 0:
       return m_config->get<Config::IDX_ModeSingle0>();
     case 1:
@@ -46,8 +47,8 @@ float control::modeValue() const {
       return m_config->get<Config::IDX_ModeSingle3>();
     }
     break;
-  default:
-    switch (m_modeIndex) {
+  case ModeManual:
+    switch (m_config->get<Config::IDX_ModeManualIdx>()) {
     case 0:
       return m_config->get<Config::IDX_ModeManual0>();
     case 1:
@@ -58,13 +59,13 @@ float control::modeValue() const {
       return m_config->get<Config::IDX_ModeManual3>();
     }
     break;
+  case ModeExtern:
+    return 0; // not handled here
   }
   return 0;
 }
 //
 void control::onModeChange(viewMode m, uint32_t v) {
-  m_mode = m;
-  m_modeIndex = v;
   sstate = SIDLE;
   m_stepper->cw(0.0, 0);
 }
@@ -91,7 +92,7 @@ void control::onModeSingleRepeat() {
       sstate = SRUN;
       break;
     }
-    if (m_mode == ModeRepeat && !m_stepper->isRunning()) {
+    if (mode() == ModeRepeat && !m_stepper->isRunning()) {
       m_stepper->cw(SPEED, modeValue());
     }
     break;
@@ -114,7 +115,7 @@ void control::onModeSingleRepeat() {
     }
   }
 }
-
+//
 void control::onModeManual() {
   switch (sstate) {
   case SIDLE:
@@ -165,5 +166,28 @@ void control::onModeManual() {
       sstate = SIDLE;
       break;
     }
+  }
+}
+//
+void control::onModeExtern() {
+  if (m_config->get<Config::IDX_ModeExternDIR>() != m_lastDir) {
+    m_lastDir = m_config->get<Config::IDX_ModeExternDIR>();
+    switch (m_config->get<Config::IDX_ModeExternDIR>()) {
+    case DIR_CCW:
+      m_stepper->ccw(m_config->get<Config::IDX_ModeExternSPD>(),
+                     m_config->get<Config::IDX_ModeExternSTEPS>());
+      break;
+    case DIR_CW:
+      m_stepper->cw(m_config->get<Config::IDX_ModeExternSPD>(),
+                    m_config->get<Config::IDX_ModeExternSTEPS>());
+      break;
+    case DIR_NONE:
+      m_stepper->cw(0.0, 0);
+      break;
+    }
+  }
+  if (!m_stepper->isRunning() &&
+      m_config->get<Config::IDX_ModeExternDIR>() != DIR_NONE) {
+    m_config->set<Config::IDX_ModeExternDIR>(DIR_NONE);
   }
 }

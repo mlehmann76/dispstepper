@@ -9,7 +9,7 @@ set (My_Project_Description "")
 set (My_Project_Author "M. Lehmann")
 set (My_Project_Revised_Date "2021-XX-XX")
 
-set (My_Project_Copyright_Date "2021-2021")
+set (My_Project_Copyright_Date "2021-2022")
 set (My_Project_Copyright "Copyright © ${My_Project_Copyright_Date} ${My_Project_Author}.")
 
 string(TOUPPER ${My_Project_Title} My_Project_Title_Caps  )

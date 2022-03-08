@@ -46,18 +46,28 @@ void stepCtrl::cw(float speedHz, uint32_t steps) {
   _steps = steps;
   _dir = CW;
   _lastTimerVal = 0;
-  _timerValPerStep = _timerFreq / (speedHz * _stepsPerTurn);
+  if (speedHz > 0.0) {
+    _timerValPerStep = _timerFreq / (speedHz * _stepsPerTurn);
+  } else {
+    _timerValPerStep = 0;
+    _steps = 0;
+  }
 }
 
 void stepCtrl::ccw(float speedHz, uint32_t steps) {
   _steps = steps;
   _dir = CCW;
   _lastTimerVal = 0;
-  _timerValPerStep = _timerFreq / (speedHz * _stepsPerTurn);
+  if (speedHz > 0.0) {
+    _timerValPerStep = _timerFreq / (speedHz * _stepsPerTurn);
+  } else {
+    _timerValPerStep = 0;
+    _steps = 0;
+  }
 }
 
 void stepCtrl::func(uint16_t timerVal) {
-  if (_steps) {
+  if (_steps && _timerValPerStep) {
     if (_lastTimerVal == 0) {
       _lastTimerVal = timerVal; // update TimerVal after start
     } else {
@@ -76,4 +86,3 @@ void stepCtrl::func(uint16_t timerVal) {
     setStep(-1);
   }
 }
-

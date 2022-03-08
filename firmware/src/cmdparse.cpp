@@ -15,7 +15,20 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                                DISPSTEPPER_NAME, DISPSTEPPER_VERSION);
                       cdc().write(_buf, strlen(_buf));
                     },
-                    [this](std::string_view s, int num) {nack();}},
+                    [this](std::string_view s, int num) { nack(); }},
+          //
+          link_type{"SETup:FACtory:DEFault",
+                    [this](int num) {
+                      if (config().isDefault()) {
+                        ack();
+                      } else {
+                        nack();
+                      }
+                    },
+                    [this](std::string_view s, int num) {
+                      config().resetToDefaults();
+                      ack();
+                    }},
           //
           link_type{"SETup:MODE",
                     [this](int num) { send(config().get<Config::IDX_Mode>()); },
@@ -110,6 +123,39 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                                  : num == 2 ? set<Config::IDX_ModeManual2>(s)
                                  : num == 3 ? set<Config::IDX_ModeManual3>(s)
                                             : set<Config::IDX_ModeManual0>(s);
+                      if (ret)
+                        ack();
+                      else
+                        nack();
+                    }},
+          link_type{"SETup:EXTernal:SPeed",
+                    [this](int num) {
+                      send(config().get<Config::IDX_ModeExternSPD>());
+                    },
+                    [this](std::string_view s, int num) {
+                      auto ret = set<Config::IDX_ModeExternSPD>(s);
+                      if (ret)
+                        ack();
+                      else
+                        nack();
+                    }},
+          link_type{"SETup:EXTernal:STeps",
+                    [this](int num) {
+                      send(config().get<Config::IDX_ModeExternSTEPS>());
+                    },
+                    [this](std::string_view s, int num) {
+                      auto ret = set<Config::IDX_ModeExternSTEPS>(s);
+                      if (ret)
+                        ack();
+                      else
+                        nack();
+                    }},
+          link_type{"SETup:EXTernal:DIR",
+                    [this](int num) {
+                      send(config().get<Config::IDX_ModeExternDIR>());
+                    },
+                    [this](std::string_view s, int num) {
+                      auto ret = set<Config::IDX_ModeExternDIR>(s);
                       if (ret)
                         ack();
                       else

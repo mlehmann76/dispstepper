@@ -15,7 +15,7 @@ class stepCtrl {
     void cw(float speed, uint32_t steps);
     void ccw(float speed, uint32_t steps);
     void func(uint16_t timerVal);
-    bool isRunning() const { return _steps ? true : false; }
+    bool isRunning() const { return _steps > 0 ? true : false; }
     dir_t dir() const {return _dir;}
 
   private:

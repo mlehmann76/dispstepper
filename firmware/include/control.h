@@ -20,14 +20,15 @@ public:
 private:
   void onModeSingleRepeat();
   void onModeManual();
+  void onModeExtern();
   float modeValue() const;
+  viewMode mode() const {return m_config != nullptr ? m_config->get<Config::IDX_Mode>() : ModeSingle;};
 
   Config *m_config;
   stepCtrl *m_stepper;
   state_t sstate;
-  viewMode m_mode;
   uint8_t m_lastButton;
   bool m_lastButtonState;
-  uint32_t m_modeIndex;
+  direction m_lastDir;
 };
 #endif // !__CONTROL_H_

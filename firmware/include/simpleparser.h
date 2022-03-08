@@ -120,7 +120,7 @@ private:
          !((_k_it == _k_end) && (_m_it == _m_end)); _k_it++, _m_it++) {
 
       if ((_k_it == _k_end) && (_m_it != _m_end)) {
-        if (isdigit(*_m_it)) {
+        if (isdigit(*_m_it) || *_m_it == '-' || *_m_it == '+') {
           // handle numeric input
           ret.second = toInt(*_m_it);
           break;

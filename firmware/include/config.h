@@ -3,16 +3,18 @@
 
 #include <cstdint>
 
-static constexpr int MODES = 3;
+static constexpr int MODES = 4;
 static constexpr int MAXLEVEL = 3;
-static constexpr int TIMEOUT = 3000;
+static constexpr int TIMEOUT = 2000;
 static constexpr int BUTTON_STEPS = 256;
 static constexpr float SPEED = 0.2;
 
-enum viewMode { ModeSingle = 0, ModeRepeat = 1, ModeManual = 2 };
+enum viewMode { ModeSingle = 0, ModeRepeat = 1, ModeManual = 2, ModeExtern = 3 };
+enum direction { DIR_CCW = -1, DIR_NONE = 0, DIR_CW = 1};
 
 class Config {
   static const uint16_t ID = 1;
+  static const uint32_t CONFIGTIMEOUT = 5000;
 
 public:
   enum index_e {
@@ -32,6 +34,10 @@ public:
     IDX_ModeManual1,
     IDX_ModeManual2,
     IDX_ModeManual3,
+    IDX_ModeExternIdx,
+    IDX_ModeExternSPD,
+    IDX_ModeExternSTEPS,
+    IDX_ModeExternDIR,
     IDX_Last
   };
   //
@@ -50,10 +56,11 @@ public:
     //
     uint32_t len = Size;
     U data[Size] = {
-        0,                           //
-        0, 0.05f, 0.1f, 0.15f, 0.2f, //
-        0, 0.05f, 0.1f, 0.15f, 0.2f, //
-        0, 16,    32,   64,    128   //
+        0, //Mode
+        0, 16.0f, 32.0f, 64.0f, 128.0f, //ModeSingle
+        0, 16.0f, 32.0f, 64.0f, 128.0f, //ModeRepeat
+        0, 0.05f, 0.1f, 0.15f, 0.2f, //ModeManual
+        0, 0.2f, 1024.0f, 0//ModeExtern
     };
     uint32_t crc = 0;
   };
@@ -74,6 +81,10 @@ public:
   //
   void run(uint32_t);
   //
+  void resetToDefaults();
+  //
+  bool isDefault() const;
+  //
 private:
   //
   template <typename T> T _get(index_e i) const;
@@ -83,6 +94,7 @@ private:
   collection<IDX_Last> m_coll;
   bool m_writeRequest;
   uint32_t m_requestTick;
+  direction m_extdir = DIR_NONE;
 };
 
 template <> inline int32_t Config::_get(Config::index_e i) const {
@@ -93,6 +105,9 @@ template <> inline uint32_t Config::_get(Config::index_e i) const {
 }
 template <> inline viewMode Config::_get(Config::index_e i) const {
   return static_cast<viewMode>(m_coll.data[i].u32);
+}
+template <> inline direction Config::_get(Config::index_e i) const {
+  return m_extdir;
 }
 template <> inline float Config::_get(Config::index_e i) const {
   return m_coll.data[i].f32;
@@ -113,8 +128,12 @@ template <> inline void Config::_set(Config::index_e i, viewMode t) {
   m_coll.data[i].u32 = t;
   m_writeRequest = true;
 }
+template <> inline void Config::_set(Config::index_e i, direction t) {
+  m_extdir = t;
+  m_writeRequest = false; // no writerequest for direction
+}
 /*
-*/
+ */
 template <Config::index_e E> typename Config::enumtraits<E>::value_type rmin() {
   return Config::enumtraits<E>::min;
 }
@@ -126,7 +145,7 @@ template <Config::index_e E> typename Config::enumtraits<E>::value_type rmax() {
 template <> struct Config::enumtraits<Config::index_e::IDX_Mode> {
   using value_type = viewMode;
   constexpr static value_type min = ModeSingle;
-  constexpr static value_type max = ModeManual;
+  constexpr static value_type max = ModeExtern;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeSingleIdx> {
@@ -138,25 +157,25 @@ template <> struct Config::enumtraits<Config::index_e::IDX_ModeSingleIdx> {
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeSingle0> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeSingle1> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeSingle2> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeSingle3> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeRepeatIdx> {
@@ -168,25 +187,25 @@ template <> struct Config::enumtraits<Config::index_e::IDX_ModeRepeatIdx> {
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeRepeat0> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeRepeat1> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeRepeat2> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeRepeat3> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 1.0;
+  constexpr static value_type max = 4096;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeManualIdx> {
@@ -198,25 +217,48 @@ template <> struct Config::enumtraits<Config::index_e::IDX_ModeManualIdx> {
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeManual0> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 4096;
+  constexpr static value_type max = 1.0;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeManual1> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 4096;
+  constexpr static value_type max = 1.0;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeManual2> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 4096;
+  constexpr static value_type max = 1.0;
 };
 
 template <> struct Config::enumtraits<Config::index_e::IDX_ModeManual3> {
   using value_type = float;
   constexpr static value_type min = 0.0;
-  constexpr static value_type max = 4096;
+  constexpr static value_type max = 1.0;
+};
+
+template <> struct Config::enumtraits<Config::index_e::IDX_ModeExternIdx> {
+  using value_type = uint32_t;
+  constexpr static value_type min = 0;
+  constexpr static value_type max = 0;
+};
+
+template <> struct Config::enumtraits<Config::index_e::IDX_ModeExternSPD> {
+  using value_type = float;
+  constexpr static value_type min = 0.0;
+  constexpr static value_type max = 1.0;
+};
+
+template <> struct Config::enumtraits<Config::index_e::IDX_ModeExternSTEPS> {
+  using value_type = float;
+  constexpr static value_type min = 0.0;
+  constexpr static value_type max = 4096.0;
+};
+template <> struct Config::enumtraits<Config::index_e::IDX_ModeExternDIR> {
+  using value_type = direction;
+  constexpr static value_type min = DIR_CCW;
+  constexpr static value_type max = DIR_CW;
 };
 
 #endif // !__CONFIG_H__

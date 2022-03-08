@@ -31,7 +31,8 @@ public:
         m_config(_c), m_modeSelect{true, 0},
         m_modeIndex{_c->get<Config::IDX_ModeSingleIdx>(),
                     _c->get<Config::IDX_ModeRepeatIdx>(),
-                    _c->get<Config::IDX_ModeManualIdx>()} {}
+                    _c->get<Config::IDX_ModeManualIdx>(),
+                    _c->get<Config::IDX_ModeExternIdx>()} {}
   //
   void run(uint32_t tick);
   //
@@ -58,7 +59,10 @@ private:
       m_led.set(m_modeIndex[m_mode], bar{});
     }
   }
-
+  //
+  uint32_t modeMin() const;
+  uint32_t modeMax() const;
+  //
   buttonCheckType m_button;
   ledViewType m_led;
   viewMode m_mode;
@@ -69,8 +73,8 @@ private:
   buttonCbType m_buttonChangeCb;
 };
 /*
-*
-*/
+ *
+ */
 template <typename TGpio, typename buttonCheckType, typename ledViewType>
 void mode<TGpio, buttonCheckType, ledViewType>::run(uint32_t tick) {
   //
@@ -124,6 +128,9 @@ void mode<TGpio, buttonCheckType, ledViewType>::onModeButton(uint32_t tick) {
       m_mode = ModeManual;
       break;
     case ModeManual:
+      m_mode = ModeExtern;
+      break;
+    case ModeExtern:
       m_mode = ModeSingle;
       break;
     };
@@ -137,13 +144,13 @@ void mode<TGpio, buttonCheckType, ledViewType>::onModeButton(uint32_t tick) {
 template <typename TGpio, typename buttonCheckType, typename ledViewType>
 void mode<TGpio, buttonCheckType, ledViewType>::onUpDownButton(uint32_t tick) {
   if (m_button.stateChanged(SW_UP) && m_button.pressed(SW_UP) &&
-      m_modeIndex[m_mode] < MAXLEVEL) {
+      m_modeIndex[m_mode] < modeMax()) {
     m_modeIndex[m_mode]++;
     updateLed(true);
     m_modeSelect.select(tick + TIMEOUT);
   }
   if (m_button.stateChanged(SW_DOWN) && m_button.pressed(SW_DOWN) &&
-      m_modeIndex[m_mode] > 0) {
+      m_modeIndex[m_mode] > modeMin()) {
     m_modeIndex[m_mode]--;
     updateLed(true);
     m_modeSelect.select(tick + TIMEOUT);
@@ -172,6 +179,10 @@ void mode<TGpio, buttonCheckType, ledViewType>::checkConfig(uint32_t tick) {
     m_modeIndex[ModeManual] = m_config->get<Config::IDX_ModeManualIdx>();
     update = true;
   }
+  if (m_modeIndex[ModeExtern] != m_config->get<Config::IDX_ModeExternIdx>()) {
+    m_modeIndex[ModeExtern] = m_config->get<Config::IDX_ModeExternIdx>();
+    update = true;
+  }
   if (update) {
     updateLed();
   }
@@ -188,10 +199,47 @@ void mode<TGpio, buttonCheckType, ledViewType>::updateConfig() {
   case ModeSingle:
     m_config->set<Config::IDX_ModeSingleIdx>(m_modeIndex[m_mode]);
     break;
-  default:
+  case ModeManual:
     m_config->set<Config::IDX_ModeManualIdx>(m_modeIndex[m_mode]);
+    break;
+  case ModeExtern:
+    m_config->set<Config::IDX_ModeExternIdx>(m_modeIndex[m_mode]);
     break;
   }
   m_config->set<Config::IDX_Mode>(m_mode);
+}
+/*
+ *
+ */
+template <typename TGpio, typename buttonCheckType, typename ledViewType>
+uint32_t mode<TGpio, buttonCheckType, ledViewType>::modeMin() const {
+  switch (m_mode) {
+  case ModeSingle:
+    return rmin<Config::IDX_ModeSingleIdx>();
+  case ModeRepeat:
+    return rmin<Config::IDX_ModeRepeatIdx>();
+  case ModeManual:
+    return rmin<Config::IDX_ModeManualIdx>();
+  case ModeExtern:
+    return rmin<Config::IDX_ModeExternIdx>();
+  }
+  return 0;
+}
+/*
+ *
+ */
+template <typename TGpio, typename buttonCheckType, typename ledViewType>
+uint32_t mode<TGpio, buttonCheckType, ledViewType>::modeMax() const {
+  switch (m_mode) {
+  case ModeSingle:
+    return rmax<Config::IDX_ModeSingleIdx>();
+  case ModeRepeat:
+    return rmax<Config::IDX_ModeRepeatIdx>();
+  case ModeManual:
+    return rmax<Config::IDX_ModeManualIdx>();
+  case ModeExtern:
+    return rmax<Config::IDX_ModeExternIdx>();
+  }
+  return 0;
 }
 #endif // __MODE_H_

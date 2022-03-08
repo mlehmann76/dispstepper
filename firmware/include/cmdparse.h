@@ -15,6 +15,7 @@ class Config;
 class usb_cdc_wrapper;
 
 class CmdParse {
+  static constexpr size_t PARSEARRAYSIZE = 12;
   static constexpr std::array<char, 2> crlf = {'\r', '\n'};
   using link_type = simpleparser::KeywordPatternLink<char, 4>;
 
@@ -47,7 +48,7 @@ private:
   std::array<char, 64> m_buf;
   size_t m_bufIndex;
   bool m_hasLineEnd;
-  std::array<link_type, 8> m_scpi_cmd;
+  std::array<link_type, PARSEARRAYSIZE> m_scpi_cmd;
 };
 
 template <> constexpr const char *CmdParse::typetraits<int32_t>::fmt() {
@@ -63,6 +64,10 @@ template <> constexpr const char *CmdParse::typetraits<float>::fmt() {
 }
 
 template <> constexpr const char *CmdParse::typetraits<viewMode>::fmt() {
+  return "%d\r\n";
+}
+
+template <> constexpr const char *CmdParse::typetraits<direction>::fmt() {
   return "%d\r\n";
 }
 
