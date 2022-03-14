@@ -1,3 +1,7 @@
 .vscode/
 hardware/reva/reva-backups/
+*.atzip
+*.*-bak
+_autosave*
+
 
