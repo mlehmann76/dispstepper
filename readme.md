@@ -41,3 +41,8 @@ change into uf2-samdx1
 * led2 will start blinking
 * the board will register as a mass storage device
 * put the uf2 update file onto the mass storage and firware update will start
+
+# License
+See Microchip / Atmel / Arm source code files for license.
+
+The new code is licensed under MIT.
