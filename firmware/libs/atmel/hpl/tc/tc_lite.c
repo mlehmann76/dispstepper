@@ -69,11 +69,11 @@ int8_t TIMER_0_init()
 
 	// hri_tc_write_DBGCTRL_reg(TC3,0); /* Run in debug: 0 */
 
-	// hri_tccount32_write_CC_reg(TC3, 0 ,0x0); /* Compare/Capture Value: 0x0 */
+	// hri_tccount16_write_CC_reg(TC3, 0 ,0x0); /* Compare/Capture Value: 0x0 */
 
-	// hri_tccount32_write_CC_reg(TC3, 1 ,0x0); /* Compare/Capture Value: 0x0 */
+	// hri_tccount16_write_CC_reg(TC3, 1 ,0x0); /* Compare/Capture Value: 0x0 */
 
-	// hri_tccount32_write_COUNT_reg(TC3,0x0); /* Counter Value: 0x0 */
+	// hri_tccount16_write_COUNT_reg(TC3,0x0); /* Counter Value: 0x0 */
 
 	// hri_tc_write_EVCTRL_reg(TC3,0 << TC_EVCTRL_MCEO0_Pos /* Match or Capture Channel 0 Event Output Enable: disabled
 	// */

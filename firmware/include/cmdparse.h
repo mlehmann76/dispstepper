@@ -12,7 +12,7 @@
 #include <optional>
 
 class Config;
-class usb_cdc_wrapper;
+class iSerial;
 
 class CmdParse {
   static constexpr size_t PARSEARRAYSIZE = 12;
@@ -24,12 +24,11 @@ class CmdParse {
   };
 
 public:
-  CmdParse(Config &_c, usb_cdc_wrapper &u);
-  void push(char c);
+  CmdParse(Config &_c, iSerial &u);
 
   void service();
   Config &config() const;
-  usb_cdc_wrapper &cdc() const;
+  iSerial &serial() const;
   //
   template <typename T> void send(T f);
   //
@@ -37,14 +36,14 @@ public:
 
 private:
   void cleanup();
-  void ack() { cdc().write("ack\r\n"); }
-  void nack() { cdc().write("nack\r\n"); }
+  void ack() { serial().write("ack\r\n"); }
+  void nack() { serial().write("nack\r\n"); }
 
   static std::optional<long> strtol(const std::string_view &s, int base = 10);
   static std::optional<double> strtod(const std::string_view &s);
 
   Config &m_pconfig;
-  usb_cdc_wrapper &m_cdc;
+  iSerial &m_serial;
   std::array<char, 64> m_buf;
   size_t m_bufIndex;
   bool m_hasLineEnd;
@@ -75,7 +74,7 @@ template <typename T> void CmdParse::send(T f) {
   char buf[64];
   memset(buf, 0, sizeof(buf));
   ::snprintf(buf, sizeof(buf), CmdParse::typetraits<T>::fmt(), f);
-  cdc().write(buf, strnlen(buf, sizeof(buf)));
+  serial().write(buf, strnlen(buf, sizeof(buf)));
 }
 
 template <Config::index_e E>

@@ -106,7 +106,7 @@ static bool usb_device_cb_state_c(usb_cdc_control_signal_t state) {
 /**
  * \brief CDC ACM Init
  */
-void cdc_device_acm_init(void) {
+void usb_init(void) { 
   /* usb stack init */
   usbdc_init(ctrl_buffer);
 
@@ -117,37 +117,25 @@ void cdc_device_acm_init(void) {
   usbdc_attach();
 }
 
-static void usb_cdc_service(char *ret, const size_t maxLen, size_t *len) {
-  *len = 0;
+/*
+ */
+
+void usb_cdc_wrapper::read(char *buf, const size_t maxLen, size_t &len) {
   if (cdcInitialized) {
-    if (len && ret) {
-      if (cdcConnected) {
-        size_t l;
-        if ((l = cdcRead(ret, maxLen))) {
-          cdcWrite(ret, l);
-          *len = l;
-        }
+    if (buf && cdcConnected) {
+      size_t l;
+      if ((l = cdcRead(buf, maxLen))) {
+        cdcWrite(buf, l);
+        len = l;
       }
+    } else {
+      len = 0;
     }
   } else {
     if (cdcdf_acm_is_enabled()) {
       cdcdf_acm_register_callback(CDCDF_ACM_CB_STATE_C,
                                   (FUNC_PTR)usb_device_cb_state_c);
       cdcInitialized = true;
-    }
-  }
-}
-
-void usb_init(void) { cdc_device_acm_init(); }
-
-/*
- */
-
-void usb_cdc_wrapper::read() {
-  usb_cdc_service(m_buf, sizeof(m_buf), &m_readlen);
-  if (m_readlen && m_readcb) {
-    for (size_t i = 0; i < m_readlen; i++) {
-      m_readcb(m_buf[i]);
     }
   }
 }

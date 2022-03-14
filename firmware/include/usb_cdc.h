@@ -3,6 +3,7 @@
 
 #include "inplace_function.h"
 #include <string>
+#include "iserial.h"
 
 /**
  * \berif Initialize USB
@@ -11,26 +12,22 @@ extern "C" {
 void usb_init(void);
 }
 
-class usb_cdc_wrapper {
+class usb_cdc_wrapper : public iSerial {
   using readcd_type = stdext::inplace_function<void(char)>;
 
 public:
-  usb_cdc_wrapper() : m_readcb{}, m_readlen(0) {}
+  usb_cdc_wrapper() {}
   usb_cdc_wrapper(const usb_cdc_wrapper &) = delete;
   usb_cdc_wrapper(usb_cdc_wrapper&&) = delete;
-  usb_cdc_wrapper(readcd_type rcb) : m_readcb{rcb}, m_readlen(0) {}
   //
   void operator=(const usb_cdc_wrapper &) = delete;
   void operator=(usb_cdc_wrapper&&) = delete;
   //
-  void read();
-  void write(const std::string_view& s);
-  void write(const char *buf, const size_t len);
-  void set(readcd_type &&rcb) { m_readcb = rcb; }
+  void read(char *buf, const size_t maxLen, size_t &len) override;
+  void write(const std::string_view &s) override;
+  void write(const char *buf, const size_t len) override;
 
 private:
-  readcd_type m_readcb;
-  char m_buf[64];
   size_t m_readlen;
 };
 

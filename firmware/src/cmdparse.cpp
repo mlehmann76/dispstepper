@@ -4,8 +4,8 @@
 #include "version.h"
 #include <cstring>
 
-CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
-    : m_pconfig(_c), m_cdc(u), m_buf(), m_bufIndex(0), m_hasLineEnd(false),
+CmdParse::CmdParse(Config &_c, iSerial &u)
+    : m_pconfig(_c), m_serial(u), m_buf(), m_bufIndex(0), m_hasLineEnd(false),
       m_scpi_cmd{
           //
           link_type{"*IDN",
@@ -13,7 +13,7 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                       char _buf[32];
                       snprintf(_buf, sizeof(_buf), "%s-%s\r\n",
                                DISPSTEPPER_NAME, DISPSTEPPER_VERSION);
-                      cdc().write(_buf, strlen(_buf));
+                      serial().write(_buf, strlen(_buf));
                     },
                     [this](std::string_view s, int num) { nack(); }},
           //
@@ -163,15 +163,6 @@ CmdParse::CmdParse(Config &_c, usb_cdc_wrapper &u)
                     }},
       } {}
 
-void CmdParse::push(char c) {
-  if (m_bufIndex < (m_buf.size() - 1)) {
-    m_buf[m_bufIndex++] = c;
-    if (c == '\r' || c == '\n') {
-      m_hasLineEnd = true;
-    }
-  }
-}
-
 void CmdParse::cleanup() {
   m_hasLineEnd = false;
   m_bufIndex = 0;
@@ -179,6 +170,17 @@ void CmdParse::cleanup() {
 }
 
 void CmdParse::service() {
+  size_t len = 0;
+  m_serial.read(&m_buf[m_bufIndex], m_buf.size() - m_bufIndex, len);
+  if (len != 0) {
+    m_hasLineEnd = false;
+    for (auto c : m_buf) {
+      if (c == '\r' || c == '\n') {
+        m_hasLineEnd = true;
+        break;
+      };
+    }
+  }
   if (m_hasLineEnd || m_bufIndex == (m_buf.size() - 1)) {
     auto p = std::find_first_of(m_buf.begin(), m_buf.end(), crlf.begin(),
                                 crlf.end());
@@ -196,7 +198,7 @@ void CmdParse::service() {
 
 Config &CmdParse::config() const { return m_pconfig; }
 
-usb_cdc_wrapper &CmdParse::cdc() const { return m_cdc; }
+iSerial &CmdParse::serial() const { return m_serial; }
 
 std::optional<long> CmdParse::strtol(const std::string_view &s, int base) {
   errno = 0;

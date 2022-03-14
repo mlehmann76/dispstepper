@@ -31,7 +31,6 @@ int main(void) {
   mode.registerModeCb(std::bind(&control::onModeChange, &ctrl, _1, _2));
   mode.registerButtonCb(
       std::bind(&control::onButtonChange<uint8_t>, &ctrl, _1, _2));
-  cdc.set(std::bind(&CmdParse::push, &parser, _1));
   gpio_set_pin_level(nSLEEP, 1);
 
   while (1) {
@@ -40,8 +39,6 @@ int main(void) {
     mode.run(getTick());
     ctrl.run();
     step.func(hri_tccount16_read_COUNT_reg(TC3));
-    //
-    cdc.read();
     //
     parser.service();
   }

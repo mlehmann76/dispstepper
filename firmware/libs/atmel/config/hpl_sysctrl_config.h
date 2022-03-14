@@ -461,7 +461,7 @@
 // <i> Chill Cycle Disable
 // <id> dfll48m_arch_ccdis
 #ifndef CONF_DFLL_CCDIS
-#define CONF_DFLL_CCDIS 0
+#define CONF_DFLL_CCDIS 1
 #endif
 
 // <q> On Demand

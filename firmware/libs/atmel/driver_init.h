@@ -23,14 +23,13 @@ extern "C" {
 
 #include <hal_flash.h>
 
-#include <hal_usart_sync.h>
+#include <hal_usart_async.h>
 #include <tc_lite.h>
 
 #include "hal_usb_device.h"
 
-extern struct flash_descriptor FLASH_0;
-
-extern struct usart_sync_descriptor USART_0;
+extern struct flash_descriptor       FLASH_0;
+extern struct usart_async_descriptor USART_0;
 
 void FLASH_0_init(void);
 void FLASH_0_CLOCK_init(void);

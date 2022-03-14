@@ -13,9 +13,14 @@
 #include <hpl_gclk_base.h>
 #include <hpl_pm_base.h>
 
-struct flash_descriptor FLASH_0;
+/*! The buffer size for USART */
+#define USART_0_BUFFER_SIZE 16
 
-struct usart_sync_descriptor USART_0;
+struct usart_async_descriptor USART_0;
+
+static uint8_t USART_0_buffer[USART_0_BUFFER_SIZE];
+
+struct flash_descriptor FLASH_0;
 
 void FLASH_0_CLOCK_init(void)
 {
@@ -29,7 +34,24 @@ void FLASH_0_init(void)
 	flash_init(&FLASH_0, NVMCTRL);
 }
 
-void USART_0_PORT_init(void)
+/**
+ * \brief USART Clock initialization function
+ *
+ * Enables register interface and peripheral clock
+ */
+void USART_0_CLOCK_init()
+{
+
+	_pm_enable_bus_clock(PM_BUS_APBC, SERCOM0);
+	_gclk_enable_channel(SERCOM0_GCLK_ID_CORE, CONF_GCLK_SERCOM0_CORE_SRC);
+}
+
+/**
+ * \brief USART pinmux initialization function
+ *
+ * Set each required pin to USART functionality
+ */
+void USART_0_PORT_init()
 {
 
 	gpio_set_pin_function(PA10, PINMUX_PA10C_SERCOM0_PAD2);
@@ -37,16 +59,15 @@ void USART_0_PORT_init(void)
 	gpio_set_pin_function(PA11, PINMUX_PA11C_SERCOM0_PAD3);
 }
 
-void USART_0_CLOCK_init(void)
-{
-	_pm_enable_bus_clock(PM_BUS_APBC, SERCOM0);
-	_gclk_enable_channel(SERCOM0_GCLK_ID_CORE, CONF_GCLK_SERCOM0_CORE_SRC);
-}
-
+/**
+ * \brief USART initialization function
+ *
+ * Enables USART peripheral, clocks and initializes USART driver
+ */
 void USART_0_init(void)
 {
 	USART_0_CLOCK_init();
-	usart_sync_init(&USART_0, SERCOM0, (void *)NULL);
+	usart_async_init(&USART_0, SERCOM0, USART_0_buffer, USART_0_BUFFER_SIZE, (void *)NULL);
 	USART_0_PORT_init();
 }
 

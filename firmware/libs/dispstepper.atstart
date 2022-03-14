@@ -244,11 +244,11 @@ drivers:
         configuration: {}
   USART_0:
     user_label: USART_0
-    definition: Atmel:SAMD21D_Drivers:0.0.1::SAMD21E17D-AF::SERCOM0::driver_config_definition::UART::HAL:Driver:USART.Sync
+    definition: Atmel:SAMD21D_Drivers:0.0.1::SAMD21E17D-AF::SERCOM0::driver_config_definition::UART::HAL:Driver:USART.Async
     functionality: USART
-    api: HAL:Driver:USART_Sync
+    api: HAL:Driver:USART_Async
     configuration:
-      usart_advanced: true
+      usart_advanced: false
       usart_arch_clock_mode: USART with internal clock
       usart_arch_cloden: false
       usart_arch_dbgstop: Keep running
@@ -642,7 +642,7 @@ drivers:
       _$freq_output_Fractional Digital Phase Locked Loop (FDPLL96M): 47998976
       dfll48m_arch_bplckc: false
       dfll48m_arch_calibration: false
-      dfll48m_arch_ccdis: false
+      dfll48m_arch_ccdis: true
       dfll48m_arch_coarse: 31
       dfll48m_arch_enable: true
       dfll48m_arch_fine: 512

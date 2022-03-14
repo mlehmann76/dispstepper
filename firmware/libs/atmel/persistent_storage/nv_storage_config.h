@@ -10,7 +10,7 @@
 //<i> The start address and (start address + Item Number * Sector size) cannot beyond device flash area.
 //<id> conf_storage_memory_start
 #ifndef CONF_STORAGE_MEMORY_START
-#define CONF_STORAGE_MEMORY_START 0x1F000
+#define CONF_STORAGE_MEMORY_START 0x1f000
 #endif
 
 //<o> Item number <0-65535>

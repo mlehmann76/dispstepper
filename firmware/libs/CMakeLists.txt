@@ -44,12 +44,13 @@ PUBLIC
     ${HAL_PATH}/src/hal_io.c
     ${HAL_PATH}/src/hal_sleep.c
     ${HAL_PATH}/src/hal_timer.c
-    ${HAL_PATH}/src/hal_usart_sync.c
+    ${HAL_PATH}/src/hal_usart_async.c
     ${HAL_PATH}/src/hal_usb_device.c
     ${HAL_PATH}/utils/src/utils_assert.c
     ${HAL_PATH}/utils/src/utils_event.c
     ${HAL_PATH}/utils/src/utils_list.c
     ${HAL_PATH}/utils/src/utils_syscalls.c
+    ${HAL_PATH}/utils/src/utils_ringbuffer.c
     ${HPL_PATH}/core/hpl_init.c
     ${HPL_PATH}/dmac/hpl_dmac.c
     ${HPL_PATH}/gclk/hpl_gclk.c
